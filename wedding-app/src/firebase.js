@@ -1,17 +1,14 @@
 // Firebase Configuration for RSVP System
 // ===========================================
 //
-// To connect Firebase Firestore for the RSVP system:
-//
+// Setup steps:
 // 1. Go to https://console.firebase.google.com/
 // 2. Create a new project (or use existing)
 // 3. Enable Firestore Database
 // 4. Go to Project Settings > General > Your apps > Add web app
-// 5. Copy the config object below and replace the placeholder values
-// 6. Install Firebase: npm install firebase
-// 7. Uncomment the code below and update RSVP.jsx to use submitRSVP()
+// 5. Copy your Firebase config values into a .env file (see .env.example)
 //
-// Security Rules for Firestore:
+// Recommended Firestore Security Rules:
 // rules_version = '2';
 // service cloud.firestore {
 //   match /databases/{database}/documents {
@@ -22,17 +19,16 @@
 //   }
 // }
 
-/*
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
@@ -47,4 +43,3 @@ export async function submitRSVP(formData) {
 }
 
 export { db };
-*/

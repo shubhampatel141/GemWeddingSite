@@ -1,5 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import useReveal from '../hooks/useReveal';
+import { submitRSVP } from '../firebase';
 
 const AVAILABLE_EVENTS = ['Mehndi', 'Haldi', 'Sangeet', 'Wedding'];
 
@@ -16,6 +17,8 @@ export default function RSVP() {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // idle | submitting | success | error
   const [toast, setToast] = useState(null);
+  const formDataRef = useRef(formData);
+  useEffect(() => { formDataRef.current = formData; }, [formData]);
 
   const openEnvelope = useCallback(() => {
     if (!envelopeOpen) {
@@ -72,15 +75,7 @@ export default function RSVP() {
     setStatus('submitting');
 
     try {
-      // Firebase integration placeholder
-      // To connect Firebase:
-      // 1. Install firebase: npm install firebase
-      // 2. Create a Firebase project and enable Firestore
-      // 3. Add your config to src/firebase.js
-      // 4. Import and use addDoc(collection(db, 'rsvps'), formData)
-
-      // Simulating API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await submitRSVP(formDataRef.current);
 
       setStatus('success');
       showToast('Your RSVP has been received! We look forward to celebrating with you.', 'success');
