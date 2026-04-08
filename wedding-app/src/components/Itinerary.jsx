@@ -103,8 +103,9 @@ function FlipCard({ event }) {
   const iconColorClass = event.iconColor || event.frontTextColor || 'text-teal-bright';
 
   return (
+    <div className="reveal">
     <div
-      className={`flip-card reveal ${flipped ? 'flipped' : ''}`}
+      className={`flip-card ${flipped ? 'flipped' : ''}`}
       onClick={handleTap}
       role="button"
       tabIndex={0}
@@ -144,6 +145,7 @@ function FlipCard({ event }) {
           </p>
         </div>
       </div>
+    </div>
     </div>
   );
 }

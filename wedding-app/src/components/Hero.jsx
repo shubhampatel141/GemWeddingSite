@@ -3,7 +3,7 @@ import useCountdown from '../hooks/useCountdown';
 const WEDDING_DATE = 'December 22, 2026 00:00:00';
 
 export default function Hero() {
-  const { days, hours, minutes } = useCountdown(WEDDING_DATE);
+  const { days, hours, minutes, seconds } = useCountdown(WEDDING_DATE);
 
   return (
     <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-dark-teal" aria-label="Hero">
@@ -54,6 +54,10 @@ export default function Hero() {
           <div className="flex flex-col items-center">
             <span className="text-4xl font-headline font-bold text-saffron">{minutes}</span>
             <span className="text-[10px] tracking-widest uppercase text-white/70 font-bold">Mins</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-4xl font-headline font-bold text-saffron" aria-live="polite">{seconds}</span>
+            <span className="text-[10px] tracking-widest uppercase text-white/70 font-bold">Secs</span>
           </div>
         </div>
       </div>

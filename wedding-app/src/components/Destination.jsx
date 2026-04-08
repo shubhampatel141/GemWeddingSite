@@ -28,7 +28,16 @@ export default function Destination() {
               <div>
                 <h4 className="font-headline text-2xl text-saffron mb-3 uppercase font-black">Vadodara (BDQ)</h4>
                 <p className="text-base text-white/70 leading-relaxed">
-                  The primary hub for arrivals. Specialized chauffeur coordination will be facilitated for all guests.
+                  Nearest airport to the venue, approximately 45 minutes from Pavagadh. Recommended for the most convenient arrival.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-8 items-start p-10 bg-white/5 backdrop-blur-sm border-l-4 border-saffron">
+              <span className="material-symbols-outlined text-saffron text-3xl" aria-hidden="true">flight</span>
+              <div>
+                <h4 className="font-headline text-2xl text-saffron mb-3 uppercase font-black">Ahmedabad (AMD)</h4>
+                <p className="text-base text-white/70 leading-relaxed">
+                  Sardar Vallabhbhai Patel International Airport — a major hub with extensive domestic and international connections, approximately 2 hours from Pavagadh.
                 </p>
               </div>
             </div>
