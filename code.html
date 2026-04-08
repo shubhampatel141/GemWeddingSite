@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shruti &amp; Shubham | Sacred Union</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Allura&amp;family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&amp;family=Playfair+Display:ital,wght@0,700;0,900;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "saffron": "#FFCA28",
+                        "teal-bright": "#FFB74D",
+                        "gold-polished": "#D4AF37",
+                        "off-white": "#FFF8F0",
+                        "warm-orange": "#FF7043",
+                        "dark-teal": "#6D4C41",
+                        "earth-brown": "#4E342E"
+                    },
+                    "fontFamily": {
+                        "cursive": ["Allura", "cursive"],
+                        "headline": ["Playfair Display", "serif"],
+                        "body": ["Lato", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .sacred-geometry-pattern {
+                background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23D4AF37' stroke-width='0.5' stroke-opacity='0.15'%3E%3Ccircle cx='40' cy='40' r='30'/%3E%3Cpath d='M40 10 L70 40 L40 70 L10 40 Z'/%3E%3Crect x='20' y='20' width='40' height='40' transform='rotate(45 40 40)'/%3E%3C/g%3E%3C/svg%3E");
+            }
+            .temple-border {
+                border-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 L50 20 L100 0 L80 50 L100 100 L50 80 L0 100 L20 50 Z' stroke='%23D4AF37' stroke-width='1'/%3E%3C/svg%3E") 30;
+            }
+            .shimmer-border:hover {
+                box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+                border-color: #D4AF37;
+            }
+            .flip-card {
+                perspective: 1000px;
+                height: 450px;
+            }
+            .flip-card-inner {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+                transform-style: preserve-3d;
+            }
+            .flip-card:hover .flip-card-inner {
+                transform: rotateY(180deg);
+            }
+            .flip-card-front, .flip-card-back {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .flip-card-back {
+                transform: rotateY(180deg);
+            }
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .envelope-container { perspective: 1500px; }
+        .envelope-wrapper {
+            position: relative;
+            width: 100%;
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            background: #fffefb;
+            min-height: 400px;
+        }
+        .envelope-flap {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 50%;
+            background: #FFF8F0;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            z-index: 40;
+            transition: transform 0.8s ease-in-out;
+            transform-origin: top;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .envelope-open .envelope-flap { transform: rotateX(180deg); z-index: 0; }
+        .wax-seal {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85px; height: 85px;
+            background: radial-gradient(circle at center, #D4AF37, #B8860B);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-family: 'Playfair Display', serif; font-weight: 900;
+            z-index: 45; cursor: pointer; transition: all 0.5s ease;
+        }
+        .envelope-open .wax-seal { opacity: 0; pointer-events: none; }
+        .form-content {
+            opacity: 0; transform: translateY(50px);
+            transition: all 1s ease 0.4s;
+        }
+        .envelope-open .form-content { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="bg-off-white text-earth-brown font-body tracking-wide selection:bg-saffron selection:text-white">
+<nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gold-polished/20 flex justify-between items-center px-8 md:px-16 py-4">
+<div class="font-headline font-black text-2xl text-teal-bright tracking-tighter">S&amp;S</div>
+<div class="hidden md:flex gap-10 font-body text-[11px] tracking-[0.25em] uppercase items-center text-earth-brown/80 font-bold">
+<a class="hover:text-teal-bright transition-colors" href="#story">The Narrative</a>
+<a class="hover:text-teal-bright transition-colors" href="#events">Itinerary</a>
+<a class="hover:text-teal-bright transition-colors" href="#travel">Logistics</a>
+<a class="hover:text-teal-bright transition-colors" href="#gallery">Visuals</a>
+<a class="px-8 py-2 bg-warm-orange text-white hover:bg-teal-bright transition-all duration-500 shadow-lg" href="#rsvp">RSVP</a>
+</div>
+<div class="md:hidden">
+<span class="material-symbols-outlined text-teal-bright text-3xl">menu</span>
+</div>
+</nav>
+<section class="relative h-screen w-full flex items-center justify-center overflow-hidden bg-dark-teal">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 w-full h-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB1VNVEKNmA5WvpsSL_1tanyZZ9pxmScLw9b24InvUkuNsFtms3ZiBtTIUHj5YjOj5nCTPXtYvToMtB3ul04jkPXFQkvye5Vb1dXWGO8-C1LH3gM1URrJzAPmv1EIuIkDAQzUA0ygGHqXtn87UI74QebVIJV2YoePwmRiICf4r9N81_ro3YPBL6xzJJcNqcGOYGYU10RAqREQs3cqFmaL0gWaxm-zfjWpulPVjJ2Rw6IShvBFtXu1L8HQ260GmaroXSkAjvw-u-aw2_'); opacity: 0.6;"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-dark-teal via-transparent to-dark-teal/40"></div>
+<div class="absolute inset-0 sacred-geometry-pattern opacity-10"></div>
+</div>
+<div class="relative z-10 text-center space-y-6 max-w-5xl px-6 reveal active">
+<div class="flex justify-center mb-4">
+<span class="material-symbols-outlined text-saffron text-6xl">temple_hindu</span>
+</div>
+<p class="font-body text-[12px] tracking-[0.5em] uppercase text-saffron font-bold">The Union of Shruti &amp; Shubham</p>
+<h1 class="font-cursive text-7xl md:text-[10rem] text-white normal-case leading-tight drop-shadow-2xl">
+            Shruti <span class="text-saffron">&amp;</span> Shubham
+        </h1>
+<p class="font-body text-xl md:text-2xl text-off-white tracking-[0.3em] font-light uppercase border-t border-b border-saffron/30 py-4 inline-block">December 22–24, 2026 • Pavagadh</p>
+<div class="flex gap-8 md:gap-12 justify-center pt-12">
+<div class="flex flex-col items-center">
+<span class="text-4xl font-headline font-bold text-saffron">342</span>
+<span class="text-[10px] tracking-widest uppercase text-white/70 font-bold">Days</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-4xl font-headline font-bold text-saffron">12</span>
+<span class="text-[10px] tracking-widest uppercase text-white/70 font-bold">Hours</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-4xl font-headline font-bold text-saffron">45</span>
+<span class="text-[10px] tracking-widest uppercase text-white/70 font-bold">Mins</span>
+</div>
+</div>
+</div>
+</section>
+<section class="py-32 px-12 md:px-24 bg-off-white sacred-geometry-pattern relative overflow-hidden">
+<div class="max-w-4xl mx-auto text-center space-y-12 reveal">
+<div class="inline-block p-8 border-2 border-teal-bright/20 rounded-full bg-white shadow-inner">
+<span class="material-symbols-outlined text-warm-orange text-5xl">potted_plant</span>
+</div>
+<h2 class="font-cursive text-7xl md:text-8xl text-teal-bright">Welcome to the celebration</h2>
+<p class="font-body text-earth-brown leading-relaxed text-2xl max-w-3xl mx-auto font-medium">
+            With immense joy and gratitude, we invite you to join us as we begin this new chapter together.
+        </p>
+<div class="w-24 h-px bg-gold-polished mx-auto"></div>
+<p class="font-body text-earth-brown/70 leading-loose max-w-3xl mx-auto text-lg italic">
+            Surrounded by the timeless beauty of Pavagadh, we look forward to celebrating love, tradition, and togetherness with our closest family and friends.
+        </p>
+</div>
+</section>
+<section class="py-32 bg-dark-teal sacred-geometry-pattern text-white overflow-hidden" id="story">
+<div class="max-w-[1400px] mx-auto px-6">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+<div class="md:col-span-7 space-y-12">
+<div class="p-12 md:p-16 bg-white/5 backdrop-blur-md reveal border border-saffron/30 relative">
+<div class="absolute -top-4 -left-4 text-saffron">
+<span class="material-symbols-outlined text-4xl">architecture</span>
+</div>
+<p class="text-saffron text-[11px] tracking-[0.4em] uppercase mb-8 font-bold">The Chapter of Intent</p>
+<h3 class="font-cursive text-6xl md:text-7xl mb-10 text-saffron normal-case leading-tight">Our Story is a powerful narrative</h3>
+<div class="space-y-6 text-white/80 leading-relaxed font-light text-lg">
+<p>Some stories begin with chance, and quietly grow into something extraordinary. Shruti and Shubham’s journey began years ago in Fort McMurray, where a shared sense of familiarity slowly turned into a lasting connection.</p>
+<p>Over time, that bond carried them across cities, through milestones, and into new adventures. Now, they look forward to celebrating not just a wedding, but a story that continues to unfold—with love, intention, and a lifetime ahead.</p>
+</div>
+</div>
+</div>
+<div class="md:col-span-5 flex justify-center">
+<div class="w-full max-w-sm aspect-[3/4] border-2 border-saffron/20 relative p-4 reveal">
+<div class="w-full h-full border border-saffron/40 flex items-center justify-center bg-white/5">
+<span class="material-symbols-outlined text-saffron text-9xl opacity-20">all_inclusive</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-32 px-6 md:px-12 bg-off-white sacred-geometry-pattern" id="events">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-24 space-y-6 reveal">
+<p class="font-body text-[13px] tracking-[0.5em] uppercase text-warm-orange font-black">Sacred Commitments</p>
+<h2 class="font-cursive text-7xl md:text-9xl text-teal-bright normal-case">The itinerary</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="flip-card reveal">
+<div class="flip-card-inner">
+<div class="flip-card-front bg-white border border-gold-polished/20 p-12 shadow-sm shimmer-border">
+<span class="material-symbols-outlined text-7xl text-teal-bright mb-8">home_pin</span>
+<p class="text-[11px] tracking-widest text-warm-orange uppercase font-bold mb-4">Dec 22 • Morning</p>
+<h4 class="font-headline text-3xl font-black uppercase text-teal-bright">Arrival</h4>
+<p class="mt-8 text-xs font-bold tracking-widest uppercase text-gold-polished opacity-60">Hover to View Details</p>
+</div>
+<div class="flip-card-back bg-teal-bright text-white p-12">
+<h4 class="font-headline text-2xl font-black uppercase mb-6">Welcome</h4>
+<p class="text-sm leading-relaxed mb-8">Guests are warmly welcomed to settle into the celebrations. Relax, explore, and reconnect before festivities begin.</p>
+<p class="text-[10px] font-bold tracking-widest uppercase border-t border-white/30 pt-4">Dress: Travel Chic</p>
+</div>
+</div>
+</div>
+<div class="flip-card reveal">
+<div class="flip-card-inner">
+<div class="flip-card-front bg-dark-teal text-white border border-dark-teal p-12 shadow-lg shimmer-border">
+<span class="material-symbols-outlined text-7xl text-saffron mb-8">spa</span>
+<p class="text-[11px] tracking-widest text-saffron uppercase font-bold mb-4">Dec 22 • Evening</p>
+<h4 class="font-headline text-3xl font-black uppercase">Mehndi</h4>
+<p class="mt-8 text-xs font-bold tracking-widest uppercase text-saffron/60">Hover to View Details</p>
+</div>
+<div class="flip-card-back bg-warm-orange text-white p-12">
+<h4 class="font-headline text-2xl font-black uppercase mb-6">Artistry</h4>
+<p class="text-sm leading-relaxed mb-8">An intimate celebration of intricate henna artistry, music, and laughter marking the start of our journey.</p>
+<p class="text-[10px] font-bold tracking-widest uppercase border-t border-white/30 pt-4">Dress: Vibrant Indian</p>
+</div>
+</div>
+</div>
+<div class="flip-card reveal">
+<div class="flip-card-inner">
+<div class="flip-card-front bg-white border border-gold-polished/20 p-12 shadow-sm shimmer-border">
+<span class="material-symbols-outlined text-7xl text-warm-orange mb-8">temple_hindu</span>
+<p class="text-[11px] tracking-widest text-warm-orange uppercase font-bold mb-4">Dec 23 • Morning</p>
+<h4 class="font-headline text-3xl font-black uppercase text-teal-bright">Grah Shanti</h4>
+<p class="mt-8 text-xs font-bold tracking-widest uppercase text-gold-polished opacity-60">Hover to View Details</p>
+</div>
+<div class="flip-card-back bg-saffron text-earth-brown p-12">
+<h4 class="font-headline text-2xl font-black uppercase mb-6">Blessings</h4>
+<p class="text-sm leading-relaxed mb-8">A sacred ritual performed to invoke blessings and harmony, setting a spiritual tone for the wedding.</p>
+<p class="text-[10px] font-bold tracking-widest uppercase border-t border-earth-brown/20 pt-4">Dress: Traditional (Light)</p>
+</div>
+</div>
+</div>
+<div class="flip-card reveal">
+<div class="flip-card-inner">
+<div class="flip-card-front bg-saffron text-earth-brown border border-saffron p-12 shadow-md shimmer-border">
+<span class="material-symbols-outlined text-7xl text-earth-brown mb-8">opacity</span>
+<p class="text-[11px] tracking-widest text-earth-brown/60 uppercase font-bold mb-4">Dec 23 • Late Morning</p>
+<h4 class="font-headline text-3xl font-black uppercase">Haldi</h4>
+<p class="mt-8 text-xs font-bold tracking-widest uppercase text-earth-brown/40">Hover to View Details</p>
+</div>
+<div class="flip-card-back bg-earth-brown text-white p-12">
+<h4 class="font-headline text-2xl font-black uppercase mb-6">Purification</h4>
+<p class="text-sm leading-relaxed mb-8">A playful tradition where turmeric paste is applied to symbolize purification and blessings.</p>
+<p class="text-[10px] font-bold tracking-widest uppercase border-t border-white/20 pt-4">Dress: Yellow Shades</p>
+</div>
+</div>
+</div>
+<div class="flip-card reveal">
+<div class="flip-card-inner">
+<div class="flip-card-front bg-teal-bright text-white border border-teal-bright p-12 shadow-lg shimmer-border">
+<span class="material-symbols-outlined text-7xl text-saffron mb-8">queue_music</span>
+<p class="text-[11px] tracking-widest text-saffron uppercase font-bold mb-4">Dec 23 • Evening</p>
+<h4 class="font-headline text-3xl font-black uppercase">Sangeet</h4>
+<p class="mt-8 text-xs font-bold tracking-widest uppercase text-white/60">Hover to View Details</p>
+</div>
+<div class="flip-card-back bg-dark-teal text-white p-12">
+<h4 class="font-headline text-2xl font-black uppercase mb-6">Celebration</h4>
+<p class="text-sm leading-relaxed mb-8">An evening of music, dance, and celebration, bringing both families together for performances.</p>
+<p class="text-[10px] font-bold tracking-widest uppercase border-t border-white/20 pt-4">Dress: Glamorous Indian</p>
+</div>
+</div>
+</div>
+<div class="flip-card reveal">
+<div class="flip-card-inner">
+<div class="flip-card-front bg-white border-2 border-warm-orange/30 p-12 shadow-sm shimmer-border">
+<span class="material-symbols-outlined text-7xl text-warm-orange mb-8">favorite</span>
+<p class="text-[11px] tracking-widest text-warm-orange uppercase font-bold mb-4">Dec 24 • Sunset</p>
+<h4 class="font-headline text-3xl font-black uppercase text-earth-brown">The Wedding</h4>
+<p class="mt-8 text-xs font-bold tracking-widest uppercase text-gold-polished opacity-60">Hover to View Details</p>
+</div>
+<div class="flip-card-back bg-warm-orange text-white p-12">
+<h4 class="font-headline text-2xl font-black uppercase mb-6">Union</h4>
+<p class="text-sm leading-relaxed mb-8">A timeless union of tradition and love set against the breathtaking backdrop of Pavagadh peaks.</p>
+<p class="text-[10px] font-bold tracking-widest uppercase border-t border-white/20 pt-4">Dress: Formal Indian</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-32 bg-dark-teal relative overflow-hidden" id="travel">
+<div class="absolute inset-0 sacred-geometry-pattern opacity-10"></div>
+<div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+<div class="space-y-12 reveal">
+<p class="text-saffron tracking-[0.5em] uppercase text-xs font-bold">Strategic Presence</p>
+<h2 class="font-cursive text-7xl md:text-8xl text-white normal-case leading-tight">The destination</h2>
+<div class="space-y-8">
+<div class="flex gap-8 items-start p-10 bg-white/5 backdrop-blur-sm border-l-4 border-saffron">
+<span class="material-symbols-outlined text-saffron text-3xl">location_on</span>
+<div>
+<h4 class="font-headline text-2xl text-saffron mb-3 uppercase font-black">Vikrama Heritage</h4>
+<p class="text-base text-white/70 leading-relaxed">Hill Base Road, Champaner-Pavagadh, Gujarat. A sanctuary nestled in the mountains where our story continues.</p>
+</div>
+</div>
+<div class="flex gap-8 items-start p-10 bg-white/5 backdrop-blur-sm border-l-4 border-saffron">
+<span class="material-symbols-outlined text-saffron text-3xl">flight</span>
+<div>
+<h4 class="font-headline text-2xl text-saffron mb-3 uppercase font-black">Vadodara (BDQ)</h4>
+<p class="text-base text-white/70 leading-relaxed">The primary hub for arrivals. Specialized chauffeur coordination will be facilitated for all guests.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="aspect-square border-2 border-saffron/20 flex items-center justify-center relative reveal shadow-2xl bg-white/5">
+<div class="w-4/5 h-4/5 border border-saffron/20 flex items-center justify-center text-center p-12">
+<div class="space-y-6">
+<span class="material-symbols-outlined text-saffron text-7xl">folded_hands</span>
+<p class="font-headline text-4xl text-white uppercase font-black tracking-widest leading-none">Pavagadh Peaks</p>
+<p class="text-[12px] tracking-[0.4em] uppercase text-saffron/60 font-bold">Cartography of Love</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-32 bg-off-white sacred-geometry-pattern" id="gallery">
+<div class="max-w-[1400px] mx-auto px-6">
+<div class="text-center mb-24 reveal">
+<h2 class="font-cursive text-7xl md:text-9xl text-teal-bright normal-case">The gallery</h2>
+<p class="text-[13px] tracking-[0.5em] uppercase text-warm-orange mt-6 font-black">Building a Shared Future</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-10">
+<div class="aspect-square border border-gold-polished/30 flex items-center justify-center p-12 bg-white reveal shadow-sm hover:shadow-lg transition-all">
+<span class="font-headline text-xl text-gold-polished/40 uppercase font-black tracking-widest">Ritual</span>
+</div>
+<div class="aspect-[3/4] border border-gold-polished/30 flex items-center justify-center p-12 bg-white mt-16 reveal shadow-sm hover:shadow-lg transition-all">
+<span class="font-headline text-xl text-gold-polished/40 uppercase font-black tracking-widest">Heritage</span>
+</div>
+<div class="aspect-square border border-gold-polished/30 flex items-center justify-center p-12 bg-white reveal shadow-sm hover:shadow-lg transition-all">
+<span class="font-headline text-xl text-gold-polished/40 uppercase font-black tracking-widest">Connection</span>
+</div>
+<div class="aspect-[3/4] border border-gold-polished/30 flex items-center justify-center p-12 bg-white mt-16 reveal shadow-sm hover:shadow-lg transition-all">
+<span class="font-headline text-xl text-gold-polished/40 uppercase font-black tracking-widest">Devotion</span>
+</div>
+</div>
+</div>
+</section>
+<section class="py-32 px-6 bg-teal-bright relative overflow-hidden" id="rsvp">
+<div class="absolute inset-0 sacred-geometry-pattern opacity-10"></div>
+<div class="max-w-4xl mx-auto envelope-container relative z-10 reveal">
+<div class="envelope-wrapper shadow-2xl border-t-[8px] border-saffron rounded-b-lg" id="envelope">
+<div class="envelope-flap" id="flap"></div>
+<div class="wax-seal" id="seal" onclick="openEnvelope()">
+                S&amp;S
+            </div>
+<div class="form-content p-12 md:p-24 relative z-10 bg-white">
+<div class="text-center mb-16 space-y-6">
+<h2 class="font-cursive text-6xl md:text-8xl text-teal-bright normal-case leading-none">Confirm Your Attendance</h2>
+<p class="font-body text-lg text-earth-brown/70 max-w-lg mx-auto font-medium tracking-wide">It would be our greatest honor to have you share in our joy. Please let us know if you can join our celebration.</p>
+<div class="pt-6 border-b border-saffron/30 pb-4 inline-block">
+<p class="text-[12px] tracking-[0.4em] uppercase text-warm-orange font-black">Kindly respond by October 15, 2026</p>
+</div>
+</div>
+<form class="space-y-12">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="space-y-3 group">
+<label class="text-[11px] tracking-[0.3em] uppercase text-teal-bright/60 group-focus-within:text-warm-orange transition-colors font-black">Full Name</label>
+<input class="w-full bg-transparent border-0 border-b-2 border-teal-bright/10 focus:ring-0 focus:border-warm-orange transition-all py-4 px-0 placeholder:text-teal-bright/20 text-earth-brown font-bold" placeholder="Your Name" type="text"/>
+</div>
+<div class="space-y-3 group">
+<label class="text-[11px] tracking-[0.3em] uppercase text-teal-bright/60 group-focus-within:text-warm-orange transition-colors font-black">Response</label>
+<select class="w-full bg-transparent border-0 border-b-2 border-teal-bright/10 focus:ring-0 focus:border-warm-orange transition-all py-4 px-0 appearance-none text-earth-brown font-bold">
+<option>Gladly Accept</option>
+<option>Regretfully Decline</option>
+</select>
+</div>
+</div>
+<div class="space-y-8">
+<p class="text-[11px] tracking-[0.3em] uppercase text-teal-bright/60 font-black">Events Attending</p>
+<div class="grid grid-cols-2 gap-6">
+<label class="flex items-center gap-4 cursor-pointer p-4 border border-teal-bright/10 hover:border-warm-orange hover:bg-off-white transition-all rounded-md">
+<input class="rounded-full border-2 border-saffron text-warm-orange focus:ring-warm-orange h-5 w-5" type="checkbox"/>
+<span class="text-xs uppercase tracking-[0.2em] font-black text-earth-brown">Mehndi</span>
+</label>
+<label class="flex items-center gap-4 cursor-pointer p-4 border border-teal-bright/10 hover:border-warm-orange hover:bg-off-white transition-all rounded-md">
+<input class="rounded-full border-2 border-saffron text-warm-orange focus:ring-warm-orange h-5 w-5" type="checkbox"/>
+<span class="text-xs uppercase tracking-[0.2em] font-black text-earth-brown">Haldi</span>
+</label>
+<label class="flex items-center gap-4 cursor-pointer p-4 border border-teal-bright/10 hover:border-warm-orange hover:bg-off-white transition-all rounded-md">
+<input class="rounded-full border-2 border-saffron text-warm-orange focus:ring-warm-orange h-5 w-5" type="checkbox"/>
+<span class="text-xs uppercase tracking-[0.2em] font-black text-earth-brown">Sangeet</span>
+</label>
+<label class="flex items-center gap-4 cursor-pointer p-4 border border-teal-bright/10 hover:border-warm-orange hover:bg-off-white transition-all rounded-md">
+<input class="rounded-full border-2 border-saffron text-warm-orange focus:ring-warm-orange h-5 w-5" type="checkbox"/>
+<span class="text-xs uppercase tracking-[0.2em] font-black text-earth-brown">Wedding</span>
+</label>
+</div>
+</div>
+<button class="w-full py-8 bg-warm-orange text-white font-body text-sm tracking-[0.5em] uppercase font-black hover:bg-teal-bright transition-all duration-700 shadow-xl" type="submit">
+                        Send Your Blessing
+                    </button>
+</form>
+</div>
+</div>
+</div>
+</section>
+<footer class="bg-off-white text-earth-brown/50 py-24 px-12 text-center relative overflow-hidden border-t border-gold-polished/20">
+<div class="absolute inset-0 sacred-geometry-pattern opacity-5 pointer-events-none"></div>
+<div class="max-w-4xl mx-auto space-y-12">
+<div class="font-cursive text-5xl md:text-7xl text-teal-bright normal-case">Shruti &amp; Shubham</div>
+<div class="w-px h-16 bg-saffron/30 mx-auto"></div>
+<p class="text-[11px] tracking-[0.6em] uppercase text-warm-orange font-bold">Building the Eternal Forever • MMXXVI</p>
+</div>
+</footer>
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    function openEnvelope() {
+        const envelope = document.getElementById('envelope');
+        if (!envelope.classList.contains('envelope-open')) {
+            envelope.classList.add('envelope-open');
+        }
+    }
+</script>
+
+</body></html>
