@@ -24,8 +24,8 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-transparent border-b border-transparent shadow-none backdrop-blur-none'
-          : 'bg-transparent border-b border-transparent shadow-none backdrop-blur-none'
+          ? 'bg-dark-teal/40 border-b border-saffron/10 shadow-[0_12px_30px_rgba(20,34,37,0.16)] backdrop-blur-md'
+          : 'bg-dark-teal/28 border-b border-saffron/8 shadow-none backdrop-blur-md'
       }`}
       role="navigation"
       aria-label="Main navigation"
