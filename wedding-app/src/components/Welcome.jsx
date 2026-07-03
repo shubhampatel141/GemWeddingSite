@@ -9,7 +9,7 @@ export default function Welcome() {
         <div className="inline-block p-8 border-2 border-teal-bright/20 rounded-full bg-white shadow-inner">
           <span className="material-symbols-outlined text-warm-orange text-5xl" aria-hidden="true">potted_plant</span>
         </div>
-        <h2 className="font-cursive text-7xl md:text-8xl text-teal-bright">Welcome to the celebration</h2>
+        <h2 className="font-cursive text-7xl md:text-8xl text-dark-teal">Welcome to the celebration</h2>
         <p className="font-body text-earth-brown leading-relaxed text-2xl max-w-3xl mx-auto font-medium">
           With immense joy and gratitude, we invite you to join us as we begin this new chapter together.
         </p>
