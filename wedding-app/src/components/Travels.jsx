@@ -3,6 +3,10 @@ import SectionHeading from './SectionHeading'
 import useReveal from '../hooks/useReveal'
 import { PACKING_GROUPS, TRAVEL_FACTS, TRAVEL_SLIDES } from '../content/siteContent'
 
+const PRIMARY_TRAVEL_FACTS = TRAVEL_FACTS.filter((fact) =>
+  ['Venue', 'Directions', 'Nearest airport', 'Alternate airport'].includes(fact.label)
+)
+
 function TravelFact({ fact }) {
   return (
     <div className="travel-fact-card">
@@ -39,39 +43,39 @@ export default function Travels() {
           />
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-[1.05fr_0.95fr] gap-12 xl:gap-16 items-start">
-          <div className="space-y-8 reveal">
-            <div className="travel-intro-card">
-              <p className="travel-card-eyebrow">Destination</p>
-              <h3 className="font-headline text-3xl md:text-4xl uppercase tracking-[0.14em] text-white font-black">
-                Vikrama Heritage, Pavagadh
-              </h3>
-              <p className="text-white/74 text-lg leading-relaxed">
-                The wedding weekend unfolds in a resort setting surrounded by hillside views, heritage textures, and enough breathing room to make the celebrations feel like a true getaway.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
-              {TRAVEL_FACTS.map((fact) => (
-                <TravelFact key={fact.label} fact={fact} />
-              ))}
-            </div>
+        <div className="space-y-10">
+          <div className="travel-intro-card reveal">
+            <p className="travel-card-eyebrow">Destination</p>
+            <h3 className="font-headline text-3xl md:text-4xl uppercase tracking-[0.14em] text-white font-black">
+              Vikrama Heritage, Pavagadh
+            </h3>
+            <p className="text-white/74 text-lg leading-relaxed">
+              The wedding weekend unfolds in a resort setting surrounded by hillside views, heritage textures, and enough breathing room to make the celebrations feel like a true getaway.
+            </p>
           </div>
 
-          <div className="reveal">
+          <div className="travel-facts-minimal reveal">
+            {PRIMARY_TRAVEL_FACTS.map((fact) => (
+              <TravelFact key={fact.label} fact={fact} />
+            ))}
+          </div>
+
+          <div className="travel-carousel-stage reveal">
             <Carousel slides={TRAVEL_SLIDES} ariaLabel="Travels destination carousel" theme="dark" />
           </div>
         </div>
 
-        <div className="space-y-10">
+        <div className="space-y-14">
           <div className="reveal">
-            <SectionHeading
-              eyebrow="Packing list"
-              title="Luggage Packing"
-              description="A soft guide for what to bring now, with room to fine-tune once final looks and weather details are confirmed."
-              align="left"
-              light
-            />
+            <div className="luggage-heading">
+              <SectionHeading
+                eyebrow="Packing list"
+                title="Luggage Packing"
+                description="A soft guide for what to bring now, with room to fine-tune once final looks and weather details are confirmed."
+                align="left"
+                light
+              />
+            </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {PACKING_GROUPS.map((group) => (

@@ -3,7 +3,7 @@ export const NAV_ITEMS = [
   { href: '#itinerary', label: 'Itinerary' },
   { href: '#travels', label: 'Travels' },
   { href: '#gallery', label: 'Gallery' },
-  { href: '#info', label: 'Important Info' },
+  { href: '#info', label: 'Important FAQ' },
 ]
 
 export const SECTION_IDS = ['story', 'itinerary', 'travels', 'gallery', 'info', 'note']

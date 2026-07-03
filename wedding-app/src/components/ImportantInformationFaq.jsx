@@ -22,7 +22,7 @@ function FaqGroup({ group, isOpen, onToggle }) {
       </button>
 
       {isOpen ? (
-        <div className="space-y-4 pt-6 border-t border-gold-polished/20">
+        <div className="faq-group-content">
           {group.items.map((item) => (
             <div key={item.question} className={`faq-item ${item.highlight ? 'faq-item-highlight' : ''}`}>
               <h3 className="faq-item-question">{item.question}</h3>
@@ -45,12 +45,12 @@ export default function ImportantInformationFaq() {
         <div className="reveal">
           <SectionHeading
             eyebrow="Guest essentials"
-            title="Important Information / FAQ"
+            title="Important FAQ"
             description="Use this section as the practical travel checklist before you leave, and treat the highlighted safety notes as the fastest things to save to your phone."
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 gap-10">
           {FAQ_GROUPS.map((group) => (
             <FaqGroup
               key={group.title}

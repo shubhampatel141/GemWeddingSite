@@ -16,13 +16,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [menuOpen])
-
   const closeMenu = () => {
     setMenuOpen(false)
   }
@@ -31,22 +24,19 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-off-white/92 border-b border-gold-polished/18 shadow-[0_18px_40px_rgba(53,91,99,0.08)] backdrop-blur-xl'
-          : 'bg-off-white/72 border-b border-gold-polished/14 backdrop-blur-lg'
+          ? 'bg-transparent border-b border-transparent shadow-none backdrop-blur-none'
+          : 'bg-transparent border-b border-transparent shadow-none backdrop-blur-none'
       }`}
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-10">
-        <div className="flex items-center justify-between py-4 md:py-5">
-          <a href="#" className="space-y-1" aria-label="Shruti and Shubham home">
-            <p className="font-cursive text-4xl md:text-5xl text-dark-teal leading-none">S&amp;S</p>
-            <p className="text-[10px] md:text-[11px] tracking-[0.36em] uppercase text-earth-brown/55 font-bold">
-              Wedding weekend
-            </p>
+      <div className="max-w-7xl mx-auto px-6 md:px-10 relative">
+        <div className="relative flex items-center justify-center py-4 md:py-5">
+          <a href="#" className="space-y-1 absolute left-0 top-1/2 -translate-y-1/2" aria-label="Shruti and Shubham home">
+            <p className="font-cursive text-2xl sm:text-4xl text-saffron leading-none">S&amp;S</p>
           </a>
 
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3">
             {NAV_ITEMS.map(({ href, label }) => {
               const isActive = activeSection === href.slice(1)
 
@@ -64,12 +54,12 @@ export default function Navbar() {
 
           <button
             type="button"
-            className="md:hidden nav-mobile-button"
+            className="lg:hidden nav-mobile-button absolute right-0 top-1/2 -translate-y-1/2"
             onClick={() => setMenuOpen((current) => !current)}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
           >
-            <span className="material-symbols-outlined text-3xl text-dark-teal" aria-hidden="true">
+            <span className="material-symbols-outlined text-3xl text-saffron" aria-hidden="true">
               {menuOpen ? 'close' : 'menu'}
             </span>
           </button>
@@ -77,8 +67,8 @@ export default function Navbar() {
       </div>
 
       {menuOpen ? (
-        <div className="md:hidden min-h-screen bg-off-white/98 backdrop-blur-2xl border-t border-gold-polished/20 px-6 py-12">
-          <div className="max-w-sm mx-auto flex flex-col items-stretch gap-4 pt-8">
+        <div className="lg:hidden absolute top-full inset-x-0 px-4 pt-2">
+          <div className="w-full rounded-[1.75rem] bg-off-white/98 backdrop-blur-2xl border border-gold-polished/20 shadow-[0_18px_40px_rgba(53,91,99,0.12)] px-4 py-4">
             {NAV_ITEMS.map(({ href, label }, index) => {
               const isActive = activeSection === href.slice(1)
 
