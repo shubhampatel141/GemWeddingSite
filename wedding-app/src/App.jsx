@@ -19,9 +19,9 @@ function App() {
         <Story />
         <Itinerary />
         <Travels />
-        <Gallery />
         <ImportantInformationFaq />
-        <Envelope />
+        <Gallery />
+        {/* <Envelope /> */}
       </main>
       <Footer />
     </>

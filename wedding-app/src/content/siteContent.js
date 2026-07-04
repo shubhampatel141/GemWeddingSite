@@ -2,8 +2,8 @@ export const NAV_ITEMS = [
   { href: '#story', label: 'Our Story' },
   { href: '#itinerary', label: 'Itinerary' },
   { href: '#travels', label: 'Travels' },
-  { href: '#gallery', label: 'Gallery' },
   { href: '#info', label: 'Important FAQ' },
+  { href: '#gallery', label: 'Gallery' },
 ]
 
 export const SECTION_IDS = ['story', 'itinerary', 'travels', 'gallery', 'info', 'note']
