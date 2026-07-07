@@ -30,15 +30,15 @@ export default function Hero() {
         </div>
 
         <p className="font-body text-[12px] tracking-[0.5em] uppercase text-saffron font-bold fade-in-up-delay-1">
-          The Union of Shruti &amp; Shubham
+          Welcome to the Union of
         </p>
 
-        <h1 className="font-cursive text-7xl md:text-[10rem] text-white normal-case leading-tight drop-shadow-2xl fade-in-up-delay-1">
+        <h1 className="font-cursive text-7xl md:text-9xl text-white normal-case leading-tight drop-shadow-2xl fade-in-up-delay-1">
           Shruti <span className="text-saffron">&amp;</span> Shubham
         </h1>
 
-        <p className="font-body text-xl md:text-2xl text-off-white tracking-[0.3em] font-light uppercase border-t border-b border-saffron/30 py-4 inline-block fade-in-up-delay-2">
-          December 22–24, 2026 • Pavagadh
+        <p className="font-body text-lg md:text-lg text-off-white tracking-[0.3em] font-light uppercase border-t border-b border-saffron/30 py-4 inline-block fade-in-up-delay-2">
+          December 22–24, 2026 <br /> Vikrama Heritage Resort, Pavagadh
         </p>
 
         {/* Countdown Timer */}
