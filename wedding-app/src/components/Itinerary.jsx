@@ -154,7 +154,7 @@ export default function Itinerary() {
   const ref = useReveal();
 
   return (
-    <section ref={ref} className="py-32 px-6 md:px-12 bg-off-white sacred-geometry-pattern" id="events" aria-label="Wedding Events Itinerary">
+    <section ref={ref} className="py-32 px-6 md:px-12 bg-dark-teal sacred-geometry-pattern" id="events" aria-label="Wedding Events Itinerary">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-24 space-y-6 reveal">
           <p className="font-body text-[13px] tracking-[0.5em] uppercase text-warm-orange font-black">

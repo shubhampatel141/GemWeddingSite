@@ -15,11 +15,11 @@ function App() {
       <main>
         <Hero />
         <Welcome />
-        <Story />
+        {/* <Story /> */}
         <Itinerary />
         <Destination />
         <Gallery />
-        <RSVP />
+        {/* <RSVP /> */}
       </main>
       <Footer />
     </>

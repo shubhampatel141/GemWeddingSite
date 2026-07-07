@@ -35,7 +35,7 @@ export default function Gallery() {
   }, []);
 
   return (
-    <section ref={ref} className="py-32 bg-off-white sacred-geometry-pattern" id="gallery" aria-label="Photo Gallery">
+    <section ref={ref} className="py-32 bg-dark-teal sacred-geometry-pattern" id="gallery" aria-label="Photo Gallery">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="text-center mb-24 reveal">
           <h2 className="font-cursive text-7xl md:text-9xl text-teal-bright normal-case">The gallery</h2>

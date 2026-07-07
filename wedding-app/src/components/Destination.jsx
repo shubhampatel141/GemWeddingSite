@@ -7,7 +7,7 @@ export default function Destination() {
   const ref = useReveal();
 
   return (
-    <section ref={ref} className="py-32 bg-dark-teal relative overflow-hidden" id="travel" aria-label="Destination and Travel Information">
+    <section ref={ref} className="py-32 bg-off-white relative overflow-hidden" id="travel" aria-label="Destination and Travel Information">
       <div className="absolute inset-0 sacred-geometry-pattern opacity-10" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
         <div className="space-y-12 reveal">
