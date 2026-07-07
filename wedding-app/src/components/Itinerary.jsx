@@ -1,173 +1,194 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import useReveal from '../hooks/useReveal';
 
 const EVENTS = [
   {
-    date: 'Dec 22 • Morning',
+    id: 'arrival',
+    day: 'Tuesday',
+    time: 'Dec 22 • Morning',
     title: 'Arrival',
     icon: 'home_pin',
-    frontBg: 'bg-white border border-gold-polished/20 shadow-sm',
-    frontTextColor: 'text-teal-bright',
-    frontDateColor: 'text-warm-orange',
-    frontHintColor: 'text-gold-polished opacity-60',
-    backBg: 'bg-teal-bright',
-    backTitle: 'Welcome',
-    backDesc: 'Guests are warmly welcomed to settle into the celebrations. Relax, explore, and reconnect before festivities begin.',
-    backDress: 'Dress: Travel Chic',
-    backBorder: 'border-white/30',
+    theme: 'Welcome',
+    summary: 'Guests are warmly welcomed to settle into the celebrations.',
+    details:
+      'Relax, explore, and reconnect before festivities begin. This is the gentlest part of the weekend and a chance to arrive without rushing straight into the celebrations.',
+    dressCode: 'Travel Chic',
+    location: 'Resort check-in and welcome spaces',
+    note: 'Arriving earlier in the day will give you time to settle in before the evening events.',
   },
   {
-    date: 'Dec 22 • Evening',
+    id: 'mehndi',
+    day: 'Tuesday',
+    time: 'Dec 22 • Evening',
     title: 'Mehndi',
     icon: 'spa',
-    frontBg: 'bg-dark-teal text-white border border-dark-teal shadow-lg',
-    frontTextColor: '',
-    frontDateColor: 'text-saffron',
-    frontHintColor: 'text-saffron/60',
-    iconColor: 'text-saffron',
-    backBg: 'bg-warm-orange',
-    backTitle: 'Artistry',
-    backDesc: 'An intimate celebration of intricate henna artistry, music, and laughter marking the start of our journey.',
-    backDress: 'Dress: Vibrant Indian',
-    backBorder: 'border-white/30',
+    theme: 'Artistry',
+    summary: 'An intimate celebration of intricate henna artistry, music, and laughter.',
+    details:
+      'The Mehndi begins the wedding festivities with color, conversation, and an easy celebratory rhythm that brings everyone together.',
+    dressCode: 'Vibrant Indian',
+    location: 'Celebration lawn',
+    note: 'Comfortable footwear is a good idea for moving between mingling and ceremony spaces.',
   },
   {
-    date: 'Dec 23 • Morning',
+    id: 'grah-shanti',
+    day: 'Wednesday',
+    time: 'Dec 23 • Morning',
     title: 'Grah Shanti',
     icon: 'temple_hindu',
-    frontBg: 'bg-white border border-gold-polished/20 shadow-sm',
-    frontTextColor: 'text-teal-bright',
-    frontDateColor: 'text-warm-orange',
-    frontHintColor: 'text-gold-polished opacity-60',
-    iconColor: 'text-warm-orange',
-    backBg: 'bg-saffron text-earth-brown',
-    backTitle: 'Blessings',
-    backDesc: 'A sacred ritual performed to invoke blessings and harmony, setting a spiritual tone for the wedding.',
-    backDress: 'Dress: Traditional (Light)',
-    backBorder: 'border-earth-brown/20',
+    theme: 'Blessings',
+    summary: 'A sacred ritual performed to invoke blessings and harmony.',
+    details:
+      'This ceremony sets a spiritual tone for the wedding and offers a calm, meaningful start to the day before the livelier celebrations begin.',
+    dressCode: 'Traditional (Light)',
+    location: 'Ceremony pavilion',
+    note: 'Lighter fabrics and softer tones will feel especially fitting for the morning atmosphere.',
   },
   {
-    date: 'Dec 23 • Late Morning',
+    id: 'haldi',
+    day: 'Wednesday',
+    time: 'Dec 23 • Late Morning',
     title: 'Haldi',
     icon: 'opacity',
-    frontBg: 'bg-saffron text-earth-brown border border-saffron shadow-md',
-    frontTextColor: '',
-    frontDateColor: 'text-earth-brown/60',
-    frontHintColor: 'text-earth-brown/40',
-    iconColor: 'text-earth-brown',
-    backBg: 'bg-earth-brown',
-    backTitle: 'Purification',
-    backDesc: 'A playful tradition where turmeric paste is applied to symbolize purification and blessings.',
-    backDress: 'Dress: Yellow Shades',
-    backBorder: 'border-white/20',
+    theme: 'Purification',
+    summary: 'A playful tradition full of turmeric, laughter, and blessings.',
+    details:
+      'Haldi is one of the most joyful events of the weekend, with a carefree energy that invites everyone into the celebration.',
+    dressCode: 'Yellow Shades',
+    location: 'Outdoor celebration area',
+    note: 'Wear something you do not mind getting a little colorful if you plan to join in closely.',
   },
   {
-    date: 'Dec 23 • Evening',
+    id: 'sangeet',
+    day: 'Wednesday',
+    time: 'Dec 23 • Evening',
     title: 'Sangeet',
     icon: 'queue_music',
-    frontBg: 'bg-teal-bright text-white border border-teal-bright shadow-lg',
-    frontTextColor: '',
-    frontDateColor: 'text-saffron',
-    frontHintColor: 'text-white/60',
-    iconColor: 'text-saffron',
-    backBg: 'bg-dark-teal',
-    backTitle: 'Celebration',
-    backDesc: 'An evening of music, dance, and celebration, bringing both families together for performances.',
-    backDress: 'Dress: Glamorous Indian',
-    backBorder: 'border-white/20',
+    theme: 'Celebration',
+    summary: 'An evening of music, dance, and performances from both families.',
+    details:
+      'The Sangeet brings everyone together for a high-energy night of celebration, choreography, and unforgettable moments on stage.',
+    dressCode: 'Glamorous Indian',
+    location: 'Main event hall',
+    note: 'This is the most performance-forward event, so expect a festive atmosphere and a later finish.',
   },
   {
-    date: 'Dec 24 • Sunset',
+    id: 'wedding',
+    day: 'Thursday',
+    time: 'Dec 24 • Sunset',
     title: 'The Wedding',
     icon: 'favorite',
-    frontBg: 'bg-white border-2 border-warm-orange/30 shadow-sm',
-    frontTextColor: 'text-earth-brown',
-    frontDateColor: 'text-warm-orange',
-    frontHintColor: 'text-gold-polished opacity-60',
-    iconColor: 'text-warm-orange',
-    backBg: 'bg-warm-orange',
-    backTitle: 'Union',
-    backDesc: 'A timeless union of tradition and love set against the breathtaking backdrop of Pavagadh peaks.',
-    backDress: 'Dress: Formal Indian',
-    backBorder: 'border-white/20',
+    theme: 'Union',
+    summary: 'A timeless union of tradition and love against the backdrop of Pavagadh.',
+    details:
+      'The ceremony brings together the heart of the celebration weekend, surrounded by family, heritage, and the beauty of the destination.',
+    dressCode: 'Formal Indian',
+    location: 'Wedding mandap',
+    note: 'Arrive a little early so you can settle in and enjoy the setting before the ceremony begins.',
   },
 ];
 
-function FlipCard({ event }) {
-  const [flipped, setFlipped] = useState(false);
-
-  const handleTap = useCallback(() => {
-    setFlipped((prev) => !prev);
-  }, []);
-
-  const iconColorClass = event.iconColor || event.frontTextColor || 'text-teal-bright';
-
+function TimelineButton({ event, isActive, onSelect, index }) {
   return (
-    <div className="reveal">
-    <div
-      className={`flip-card ${flipped ? 'flipped' : ''}`}
-      onClick={handleTap}
-      role="button"
-      tabIndex={0}
-      aria-label={`${event.title} - tap to see details`}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          handleTap();
-        }
-      }}
+    <button
+      type="button"
+      className={`timeline-stop ${isActive ? 'timeline-stop-active' : ''}`}
+      onClick={() => onSelect(event.id)}
+      aria-pressed={isActive}
+      aria-label={`View details for ${event.title}`}
     >
-      <div className="flip-card-inner">
-        <div className={`flip-card-front ${event.frontBg} p-12 shimmer-border`}>
-          <span className={`material-symbols-outlined text-7xl ${iconColorClass} mb-8`} aria-hidden="true">
-            {event.icon}
-          </span>
-          <p className={`text-[11px] tracking-widest ${event.frontDateColor} uppercase font-bold mb-4`}>
-            {event.date}
-          </p>
-          <h4 className={`font-headline text-3xl font-black uppercase ${event.frontTextColor}`}>
-            {event.title}
-          </h4>
-          <p className={`mt-8 text-xs font-bold tracking-widest uppercase ${event.frontHintColor}`}>
-            <span className="hidden md:inline">Hover</span>
-            <span className="md:hidden">Tap</span> to View Details
-          </p>
-        </div>
-        <div className={`flip-card-back ${event.backBg} text-white p-12`}>
-          <h4 className="font-headline text-2xl font-black uppercase mb-6">
-            {event.backTitle}
-          </h4>
-          <p className="text-sm leading-relaxed mb-8">
-            {event.backDesc}
-          </p>
-          <p className={`text-[10px] font-bold tracking-widest uppercase border-t ${event.backBorder} pt-4`}>
-            {event.backDress}
-          </p>
-        </div>
+      <span className="timeline-index">{String(index + 1).padStart(2, '0')}</span>
+      <span className={`timeline-icon material-symbols-outlined ${isActive ? 'text-earth-brown' : 'text-saffron'}`} aria-hidden="true">
+        {event.icon}
+      </span>
+      <div className="space-y-2 text-left">
+        <p className="timeline-day">{event.day}</p>
+        <h3 className="timeline-title">{ event.title}</h3>
+        <p className="timeline-time">{event.time}</p>
       </div>
-    </div>
-    </div>
+    </button>
   );
 }
 
 export default function Itinerary() {
   const ref = useReveal();
+  const [selectedId, setSelectedId] = useState(EVENTS[0].id);
+  const selectedEvent = EVENTS.find((event) => event.id === selectedId) ?? EVENTS[0];
 
   return (
-    <section ref={ref} className="py-32 px-6 md:px-12 bg-dark-teal sacred-geometry-pattern" id="events" aria-label="Wedding Events Itinerary">
+    <section
+      ref={ref}
+      className="py-32 px-6 md:px-12 bg-earth-light-brown sacred-geometry-pattern"
+      id="events"
+      aria-label="Wedding Events Itinerary"
+    >
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-24 space-y-6 reveal">
+        <div className="text-center mb-16 md:mb-20 space-y-6 reveal">
           <p className="font-body text-[13px] tracking-[0.5em] uppercase text-warm-orange font-black">
             Sacred Commitments
           </p>
           <h2 className="font-cursive text-7xl md:text-9xl text-teal-bright normal-case">
             The itinerary
           </h2>
+          <p className="max-w-3xl mx-auto text-off-white/75 text-base md:text-lg leading-relaxed">
+            Follow the celebration step by step. Select any event to see the mood, the moment,
+            and the details at a glance.
+          </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {EVENTS.map((event) => (
-            <FlipCard key={event.title} event={event} />
-          ))}
+
+        <div className="grid grid-cols-1 xl:grid-cols-[0.88fr_1.12fr] gap-8 xl:gap-10 items-stretch">
+          <div className="timeline-panel reveal">
+            <div className="timeline-rail" aria-hidden="true" />
+            <div className="space-y-4 relative z-10">
+              {EVENTS.map((event, index) => (
+                <TimelineButton
+                  key={event.id}
+                  event={event}
+                  isActive={event.id === selectedEvent.id}
+                  onSelect={setSelectedId}
+                  index={index}
+                />
+              ))}
+            </div>
+          </div>
+
+          <article className="itinerary-detail-card reveal h-full" aria-live="polite">
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="detail-chip">{selectedEvent.day}</p>
+              <p className="detail-chip detail-chip-accent">{selectedEvent.time}</p>
+            </div>
+
+            <div className="space-y-5">
+              <p className="detail-kicker">{selectedEvent.theme}</p>
+              <h3 className="font-headline text-4xl md:text-5xl uppercase tracking-[0.08em] text-dark-teal font-black">
+                {selectedEvent.title}
+              </h3>
+              <p className="text-lg md:text-xl text-earth-brown/80 leading-relaxed">
+                {selectedEvent.summary}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="detail-info-card">
+                <p className="detail-info-label">Dress code</p>
+                <p className="detail-info-value">{selectedEvent.dressCode}</p>
+              </div>
+              <div className="detail-info-card">
+                <p className="detail-info-label">Location</p>
+                <p className="detail-info-value">{selectedEvent.location}</p>
+              </div>
+            </div>
+
+            <div className="space-y-5 border-t border-gold-polished/20 pt-8">
+              <p className="text-base md:text-lg leading-relaxed text-earth-brown/78">
+                {selectedEvent.details}
+              </p>
+              <div className="detail-note-box">
+                <p className="detail-info-label">Helpful note</p>
+                <p className="detail-info-value">{selectedEvent.note}</p>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
     </section>

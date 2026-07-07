@@ -6,7 +6,7 @@ export default function Hero() {
   const { days, hours, minutes, seconds } = useCountdown(WEDDING_DATE);
 
   return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-dark-teal" aria-label="Hero">
+    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-earth-light-brown" aria-label="Hero">
       {/* Video Background */}
       <div className="absolute inset-0 z-0">
         <video
@@ -14,12 +14,12 @@ export default function Hero() {
           muted
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full object-cover"
           aria-hidden="true"
         >
           <source src="/hero.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-t from-dark-teal via-dark-teal/40 to-dark-teal/60" />
+        <div className="absolute inset-0 bg-linear-to-t from-earth-light-brown via-earth-light-brown/40 to-earth-light-brown/60" />
         <div className="absolute inset-0 sacred-geometry-pattern opacity-10" />
       </div>
 

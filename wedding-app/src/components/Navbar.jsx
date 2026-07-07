@@ -4,11 +4,12 @@ import useActiveSection from '../hooks/useActiveSection';
 const NAV_LINKS = [
   { href: '#story', label: 'The Narrative' },
   { href: '#events', label: 'Itinerary' },
-  { href: '#travel', label: 'Logistics' },
+  { href: '#travels', label: 'Travels' },
+  { href: '#info', label: 'Important FAQ' },
   { href: '#gallery', label: 'Visuals' },
 ];
 
-const SECTION_IDS = ['story', 'events', 'travel', 'gallery', 'rsvp'];
+const SECTION_IDS = ['story', 'events', 'travels', 'info', 'gallery', 'rsvp'];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
