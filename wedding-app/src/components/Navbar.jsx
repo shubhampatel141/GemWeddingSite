@@ -1,119 +1,95 @@
-import { useState, useEffect } from 'react';
-import useActiveSection from '../hooks/useActiveSection';
-
-const NAV_LINKS = [
-  { href: '#story', label: 'The Narrative' },
-  { href: '#events', label: 'Itinerary' },
-  { href: '#travel', label: 'Logistics' },
-  { href: '#gallery', label: 'Visuals' },
-];
-
-const SECTION_IDS = ['story', 'events', 'travel', 'gallery', 'rsvp'];
+import { useEffect, useState } from 'react'
+import useActiveSection from '../hooks/useActiveSection'
+import { NAV_ITEMS, SECTION_IDS } from '../content/siteContent'
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const activeSection = useActiveSection(SECTION_IDS);
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const activeSection = useActiveSection(SECTION_IDS)
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+      setScrolled(window.scrollY > 32)
     }
-    return () => { document.body.style.overflow = ''; };
-  }, [menuOpen]);
 
-  const handleNavClick = () => {
-    setMenuOpen(false);
-  };
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const closeMenu = () => {
+    setMenuOpen(false)
+  }
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 flex justify-between items-center px-8 md:px-16 py-4 transition-all duration-300 ${
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-white/95 backdrop-blur-md border-b border-gold-polished/20 shadow-sm'
-          : 'bg-white/90 backdrop-blur-md border-b border-gold-polished/20'
+          ? 'bg-dark-teal/40 border-b border-saffron/10 shadow-[0_12px_30px_rgba(20,34,37,0.16)] backdrop-blur-md'
+          : 'bg-dark-teal/28 border-b border-saffron/8 shadow-none backdrop-blur-md'
       }`}
       role="navigation"
       aria-label="Main navigation"
     >
-      <a href="#" className="font-headline font-black text-2xl text-teal-bright tracking-tighter" aria-label="Shruti and Shubham - Home">
-        S&amp;S
-      </a>
-
-      {/* Desktop Nav */}
-      <div className="hidden md:flex gap-10 font-body text-[11px] tracking-[0.25em] uppercase items-center text-earth-brown/80 font-bold">
-        {NAV_LINKS.map(({ href, label }) => (
-          <a
-            key={href}
-            href={href}
-            className={`hover:text-teal-bright transition-colors ${
-              activeSection === href.slice(1) ? 'text-teal-bright' : ''
-            }`}
-          >
-            {label}
+      <div className="max-w-7xl mx-auto px-6 md:px-10 relative">
+        <div className="relative flex items-center justify-center py-4 md:py-5">
+          <a href="#" className="space-y-1 absolute left-0 top-1/2 -translate-y-1/2" aria-label="Shruti and Shubham home">
+            <p className="font-cursive text-2xl sm:text-4xl text-saffron leading-none">S&amp;S</p>
           </a>
-        ))}
-        <a
-          href="#rsvp"
-          className={`px-8 py-2 bg-warm-orange text-white hover:bg-teal-bright transition-all duration-500 shadow-lg ${
-            activeSection === 'rsvp' ? 'bg-teal-bright' : ''
-          }`}
-        >
-          RSVP
-        </a>
+
+          <div className="hidden lg:flex items-center gap-3">
+            {NAV_ITEMS.map(({ href, label }) => {
+              const isActive = activeSection === href.slice(1)
+
+              return (
+                <a
+                  key={href}
+                  href={href}
+                  className={`nav-pill ${isActive ? 'nav-pill-active' : ''}`}
+                >
+                  {label}
+                </a>
+              )
+            })}
+          </div>
+
+          <button
+            type="button"
+            className="lg:hidden nav-mobile-button absolute right-0 top-1/2 -translate-y-1/2"
+            onClick={() => setMenuOpen((current) => !current)}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            <span className="material-symbols-outlined text-3xl text-saffron" aria-hidden="true">
+              {menuOpen ? 'close' : 'menu'}
+            </span>
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Hamburger */}
-      <button
-        className="md:hidden z-50 relative"
-        onClick={() => setMenuOpen(!menuOpen)}
-        aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-        aria-expanded={menuOpen}
-      >
-        <span className="material-symbols-outlined text-teal-bright text-3xl">
-          {menuOpen ? 'close' : 'menu'}
-        </span>
-      </button>
+      {menuOpen ? (
+        <div className="lg:hidden absolute top-full inset-x-0 px-4 pt-2">
+          <div className="w-full rounded-[1.75rem] bg-off-white/98 backdrop-blur-2xl border border-gold-polished/20 shadow-[0_18px_40px_rgba(53,91,99,0.12)] px-4 py-4">
+            {NAV_ITEMS.map(({ href, label }, index) => {
+              const isActive = activeSection === href.slice(1)
 
-      {/* Mobile Menu Overlay */}
-      {menuOpen && (
-        <div
-          className="fixed inset-0 bg-white/98 backdrop-blur-lg z-40 flex flex-col items-center justify-center gap-8 mobile-menu-overlay"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Navigation menu"
-        >
-          {NAV_LINKS.map(({ href, label }) => (
-            <a
-              key={href}
-              href={href}
-              onClick={handleNavClick}
-              className={`font-body text-lg tracking-[0.25em] uppercase font-bold transition-colors ${
-                activeSection === href.slice(1) ? 'text-teal-bright' : 'text-earth-brown/80'
-              } hover:text-teal-bright`}
-            >
-              {label}
-            </a>
-          ))}
-          <a
-            href="#rsvp"
-            onClick={handleNavClick}
-            className="px-12 py-3 bg-warm-orange text-white hover:bg-teal-bright transition-all duration-500 shadow-lg text-sm tracking-[0.25em] uppercase font-bold"
-          >
-            RSVP
-          </a>
+              return (
+                <a
+                  key={href}
+                  href={href}
+                  onClick={closeMenu}
+                  className={`nav-mobile-link ${isActive ? 'nav-mobile-link-active' : ''}`}
+                  style={{ transitionDelay: `${index * 40}ms` }}
+                >
+                  <span className="text-[11px] tracking-[0.34em] uppercase text-earth-brown/45 font-bold">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <span className="font-headline text-3xl uppercase tracking-[0.08em]">{label}</span>
+                </a>
+              )
+            })}
+          </div>
         </div>
-      )}
+      ) : null}
     </nav>
-  );
+  )
 }
