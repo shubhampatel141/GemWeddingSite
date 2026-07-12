@@ -1,111 +1,319 @@
-import { useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useReveal from '../hooks/useReveal';
 
-const GALLERY_ITEMS = [
-  { label: 'Ritual', aspect: 'aspect-square', offset: '' },
-  { label: 'Heritage', aspect: 'aspect-[3/4]', offset: 'mt-16' },
-  { label: 'Connection', aspect: 'aspect-square', offset: '' },
-  { label: 'Devotion', aspect: 'aspect-[3/4]', offset: 'mt-16' },
-  { label: 'Tradition', aspect: 'aspect-square', offset: '' },
-  { label: 'Joy', aspect: 'aspect-[3/4]', offset: 'mt-16' },
-  { label: 'Grace', aspect: 'aspect-square', offset: '' },
-  { label: 'Eternity', aspect: 'aspect-[3/4]', offset: 'mt-16' },
+const SAMPLE_GALLERY_IMAGE = '/welcome-photo.jpeg';
+
+const GALLERY_CELLS = [
+  { id: 'feature' },
+  { id: 'detailTop' },
+  { id: 'detailBottom' },
+  { id: 'portrait' },
 ];
 
-export default function Gallery() {
-  const ref = useReveal();
-  const [lightboxIndex, setLightboxIndex] = useState(null);
+const DESKTOP_LAYOUTS = {
+  classic: {
+    feature: { variant: 'feature', gridColumn: '1 / span 6', gridRow: '1 / span 2' },
+    detailTop: { variant: 'detail', gridColumn: '7 / span 3', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '7 / span 3', gridRow: '2 / span 1' },
+    portrait: { variant: 'portrait', gridColumn: '10 / span 3', gridRow: '1 / span 2' },
+  },
+  reverse: {
+    portrait: { variant: 'portrait', gridColumn: '1 / span 3', gridRow: '1 / span 2' },
+    feature: { variant: 'feature', gridColumn: '4 / span 6', gridRow: '1 / span 2' },
+    detailTop: { variant: 'detail', gridColumn: '10 / span 3', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '10 / span 3', gridRow: '2 / span 1' },
+  },
+  stackedLead: {
+    detailTop: { variant: 'detail', gridColumn: '1 / span 3', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '1 / span 3', gridRow: '2 / span 1' },
+    feature: { variant: 'feature', gridColumn: '4 / span 6', gridRow: '1 / span 2' },
+    portrait: { variant: 'portrait', gridColumn: '10 / span 3', gridRow: '1 / span 2' },
+  },
+  offset: {
+    portrait: { variant: 'portrait', gridColumn: '1 / span 3', gridRow: '1 / span 2' },
+    detailTop: { variant: 'detail', gridColumn: '4 / span 3', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '4 / span 3', gridRow: '2 / span 1' },
+    feature: { variant: 'feature', gridColumn: '7 / span 6', gridRow: '1 / span 2' },
+  },
+};
 
-  const openLightbox = useCallback((index) => {
-    setLightboxIndex(index);
-    document.body.style.overflow = 'hidden';
-  }, []);
+const TABLET_LAYOUTS = {
+  classic: {
+    feature: { variant: 'feature', gridColumn: '1 / span 4', gridRow: '1 / span 2' },
+    detailTop: { variant: 'detail', gridColumn: '5 / span 2', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '5 / span 2', gridRow: '2 / span 1' },
+    portrait: { variant: 'portrait', gridColumn: '7 / span 2', gridRow: '1 / span 2' },
+  },
+  reverse: {
+    portrait: { variant: 'portrait', gridColumn: '1 / span 2', gridRow: '1 / span 2' },
+    feature: { variant: 'feature', gridColumn: '3 / span 4', gridRow: '1 / span 2' },
+    detailTop: { variant: 'detail', gridColumn: '7 / span 2', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '7 / span 2', gridRow: '2 / span 1' },
+  },
+  stackedLead: {
+    detailTop: { variant: 'detail', gridColumn: '1 / span 2', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '1 / span 2', gridRow: '2 / span 1' },
+    feature: { variant: 'feature', gridColumn: '3 / span 4', gridRow: '1 / span 2' },
+    portrait: { variant: 'portrait', gridColumn: '7 / span 2', gridRow: '1 / span 2' },
+  },
+  offset: {
+    portrait: { variant: 'portrait', gridColumn: '1 / span 2', gridRow: '1 / span 2' },
+    detailTop: { variant: 'detail', gridColumn: '3 / span 2', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '3 / span 2', gridRow: '2 / span 1' },
+    feature: { variant: 'feature', gridColumn: '5 / span 4', gridRow: '1 / span 2' },
+  },
+};
 
-  const closeLightbox = useCallback(() => {
-    setLightboxIndex(null);
-    document.body.style.overflow = '';
-  }, []);
+const MOBILE_LAYOUT = {
+  feature: { variant: 'feature', gridColumn: '1 / span 6', gridRow: '1 / span 2' },
+  portrait: { variant: 'portrait', gridColumn: '1 / span 3', gridRow: '3 / span 2' },
+  detailTop: { variant: 'detail', gridColumn: '4 / span 3', gridRow: '3 / span 1' },
+  detailBottom: { variant: 'detail', gridColumn: '4 / span 3', gridRow: '4 / span 1' },
+};
 
-  const goNext = useCallback(() => {
-    setLightboxIndex((prev) => (prev + 1) % GALLERY_ITEMS.length);
-  }, []);
+const GALLERY_SLIDES = [
+  {
+    id: 'arrival',
+    layout: 'classic',
+    photos: {
+      feature: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '50% 28%' },
+      detailTop: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '24% 62%' },
+      detailBottom: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '80% 63%' },
+      portrait: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '78% 25%' },
+    },
+  },
+  {
+    id: 'ritual',
+    layout: 'reverse',
+    photos: {
+      feature: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '46% 38%' },
+      detailTop: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '34% 44%' },
+      detailBottom: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '74% 42%' },
+      portrait: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '68% 48%' },
+    },
+  },
+  {
+    id: 'portraits',
+    layout: 'stackedLead',
+    photos: {
+      feature: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '52% 16%' },
+      detailTop: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '18% 54%' },
+      detailBottom: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '68% 58%' },
+      portrait: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '58% 20%' },
+    },
+  },
+  {
+    id: 'sunset',
+    layout: 'offset',
+    photos: {
+      feature: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '50% 50%' },
+      detailTop: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '28% 74%' },
+      detailBottom: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '76% 76%' },
+      portrait: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '82% 52%' },
+    },
+  },
+];
 
-  const goPrev = useCallback(() => {
-    setLightboxIndex((prev) => (prev - 1 + GALLERY_ITEMS.length) % GALLERY_ITEMS.length);
-  }, []);
+function clampIndex(index, length) {
+  if (length === 0) {
+    return 0;
+  }
+
+  return (index + length) % length;
+}
+
+function getSceneLayout(layoutKey, viewportWidth) {
+  if (viewportWidth <= 768) {
+    return MOBILE_LAYOUT;
+  }
+
+  if (viewportWidth <= 1100) {
+    return TABLET_LAYOUTS[layoutKey] ?? TABLET_LAYOUTS.classic;
+  }
+
+  return DESKTOP_LAYOUTS[layoutKey] ?? DESKTOP_LAYOUTS.classic;
+}
+
+function GallerySlide({ slide, viewportWidth }) {
+  const layout = getSceneLayout(slide.layout, viewportWidth);
 
   return (
-    <section ref={ref} className="py-32 bg-off-white sacred-geometry-pattern" id="gallery" aria-label="Photo Gallery">
-      <div className="max-w-[1400px] mx-auto px-6">
-        <div className="text-center mb-24 reveal">
-          <h2 className="font-cursive text-7xl md:text-9xl text-teal-bright normal-case">The gallery</h2>
-          <p className="text-[13px] tracking-[0.5em] uppercase text-warm-orange mt-6 font-black">
-            Building a Shared Future
-          </p>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
-          {GALLERY_ITEMS.map((item, index) => (
-            <button
-              key={item.label}
-              className={`${item.aspect} ${item.offset} border border-gold-polished/30 flex items-center justify-center p-12 bg-white reveal shadow-sm hover:shadow-lg transition-all cursor-pointer group`}
-              onClick={() => openLightbox(index)}
-              aria-label={`View ${item.label} photo`}
+    <div className="gallery-slide-frame">
+      <div className="gallery-bento-grid">
+        {GALLERY_CELLS.map((cell) => {
+          const photo = slide.photos[cell.id];
+          const layoutCell = layout[cell.id];
+          const fit = photo?.fit || 'cover';
+
+          return (
+            <div
+              key={`${slide.id}-${cell.id}`}
+              className={`gallery-photo-cell gallery-photo-cell-${layoutCell.variant}`}
+              style={{
+                gridColumn: layoutCell.gridColumn,
+                gridRow: layoutCell.gridRow,
+              }}
             >
-              <span className="font-headline text-xl text-gold-polished/40 uppercase font-black tracking-widest group-hover:text-gold-polished transition-colors">
-                {item.label}
-              </span>
-            </button>
-          ))}
+              {photo?.src ? (
+                <div className={`gallery-photo-media ${fit === 'contain' ? 'gallery-photo-media-contained' : ''}`}>
+                  <img
+                    src={photo.src}
+                    alt={photo.alt}
+                    className={`gallery-photo-image ${fit === 'contain' ? 'gallery-photo-image-contained' : ''}`}
+                    style={{
+                      objectPosition: photo.objectPosition || 'center',
+                    }}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              ) : (
+                <div className="gallery-photo-placeholder" aria-hidden="true">
+                  <span className="material-symbols-outlined gallery-photo-placeholder-icon">photo_camera</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default function Gallery() {
+  const revealRef = useReveal();
+  const touchStartX = useRef(null);
+  const [viewportWidth, setViewportWidth] = useState(() => (typeof window === 'undefined' ? 1440 : window.innerWidth));
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const syncViewport = () => {
+      setViewportWidth(window.innerWidth);
+    };
+
+    syncViewport();
+    window.addEventListener('resize', syncViewport);
+
+    return () => {
+      window.removeEventListener('resize', syncViewport);
+    };
+  }, []);
+
+  const goToSlide = (index) => {
+    setActiveIndex(clampIndex(index, GALLERY_SLIDES.length));
+  };
+
+  const goToNext = () => {
+    setActiveIndex((previous) => clampIndex(previous + 1, GALLERY_SLIDES.length));
+  };
+
+  const goToPrev = () => {
+    setActiveIndex((previous) => clampIndex(previous - 1, GALLERY_SLIDES.length));
+  };
+
+  const handleTouchStart = (event) => {
+    touchStartX.current = event.touches[0]?.clientX ?? null;
+  };
+
+  const handleTouchEnd = (event) => {
+    if (touchStartX.current === null) {
+      return;
+    }
+
+    const touchEndX = event.changedTouches[0]?.clientX ?? touchStartX.current;
+    const delta = touchStartX.current - touchEndX;
+
+    if (Math.abs(delta) > 40) {
+      if (delta > 0) {
+        goToNext();
+      } else {
+        goToPrev();
+      }
+    }
+
+    touchStartX.current = null;
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      goToNext();
+    }
+
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      goToPrev();
+    }
+  };
+
+  return (
+    <section ref={revealRef} className="gallery-section bg-off-white sacred-geometry-pattern" id="gallery" aria-label="Photo Gallery">
+      <div className="max-w-[1480px] mx-auto px-6 md:px-8 lg:px-10">
+        <div className="gallery-intro reveal">
+          {/* <p className="gallery-intro-eyebrow">Photo essay</p> */}
+          <h2 className="gallery-intro-title">Gallery</h2>
         </div>
       </div>
 
-      {/* Lightbox Modal */}
-      {lightboxIndex !== null && (
+      <div className="gallery-carousel-shell reveal">
+        <div className="gallery-carousel-topline" aria-hidden="true">
+          <span className="gallery-carousel-count">
+            {String(activeIndex + 1).padStart(2, '0')} / {String(GALLERY_SLIDES.length).padStart(2, '0')}
+          </span>
+          <span className="gallery-carousel-rule" />
+        </div>
+
         <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center lightbox-overlay"
-          onClick={closeLightbox}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Gallery lightbox"
+          className="gallery-carousel-viewport"
+          aria-roledescription="carousel"
+          aria-label="Photo gallery carousel"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
         >
-          <button
-            className="absolute top-6 right-6 text-white/80 hover:text-white transition-colors"
-            onClick={closeLightbox}
-            aria-label="Close lightbox"
-          >
-            <span className="material-symbols-outlined text-4xl">close</span>
-          </button>
-
-          <button
-            className="absolute left-6 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors"
-            onClick={(e) => { e.stopPropagation(); goPrev(); }}
-            aria-label="Previous image"
-          >
-            <span className="material-symbols-outlined text-5xl">chevron_left</span>
-          </button>
-
           <div
-            className="max-w-3xl max-h-[80vh] bg-white/10 backdrop-blur-md border border-gold-polished/30 flex items-center justify-center p-16 md:p-24"
-            onClick={(e) => e.stopPropagation()}
+            className="gallery-carousel-track"
+            style={{ transform: `translateX(-${activeIndex * 100}%)` }}
           >
-            <div className="text-center space-y-6">
-              <span className="material-symbols-outlined text-saffron text-8xl" aria-hidden="true">photo_camera</span>
-              <p className="font-headline text-3xl text-white uppercase font-black tracking-widest">
-                {GALLERY_ITEMS[lightboxIndex].label}
-              </p>
-              <p className="text-white/50 text-sm tracking-widest uppercase">Photo placeholder</p>
-            </div>
+            {GALLERY_SLIDES.map((slide) => (
+              <div key={slide.id} className="gallery-carousel-slide">
+                <GallerySlide slide={slide} viewportWidth={viewportWidth} />
+              </div>
+            ))}
           </div>
 
-          <button
-            className="absolute right-6 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors"
-            onClick={(e) => { e.stopPropagation(); goNext(); }}
-            aria-label="Next image"
-          >
-            <span className="material-symbols-outlined text-5xl">chevron_right</span>
+        </div>
+
+        <div className="gallery-carousel-controls">
+          <button type="button" className="gallery-carousel-arrow" onClick={goToPrev} aria-label="Previous gallery slide">
+            <span className="material-symbols-outlined">west</span>
+          </button>
+          <button type="button" className="gallery-carousel-arrow" onClick={goToNext} aria-label="Next gallery slide">
+            <span className="material-symbols-outlined">east</span>
           </button>
         </div>
-      )}
+
+        <div className="gallery-carousel-footer">
+          <div className="gallery-carousel-dots" role="tablist" aria-label="Gallery slides">
+            {GALLERY_SLIDES.map((slide, index) => (
+              <button
+                key={slide.id}
+                type="button"
+                className={`gallery-carousel-dot ${index === activeIndex ? 'gallery-carousel-dot-active' : ''}`}
+                onClick={() => goToSlide(index)}
+                role="tab"
+                aria-selected={index === activeIndex}
+                aria-label={`Go to gallery slide ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          <p className="gallery-carousel-note">
+            Swipe on mobile, or use the left and right arrow keys while the carousel is focused.
+          </p>
+        </div>
+      </div>
     </section>
   );
 }

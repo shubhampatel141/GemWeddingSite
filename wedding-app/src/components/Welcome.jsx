@@ -11,16 +11,20 @@ export default function Welcome() {
   return (
     <section className="bg-off-white relative overflow-hidden" aria-label="Welcome">
       <div className="grid grid-cols-1 md:grid-cols-2 items-stretch">
-        <div className="relative bg-earth-light-brown flex items-center justify-center p-6 md:p-8 lg:p-10">
+        <div className="relative bg-earth-light-brown flex items-center justify-center">
 
           {imageAvailable ? (
-            <img
-              src={WELCOME_IMAGE_SRC}
-              alt="Welcome photo for the wedding celebration"
-              className="block h-auto"
+            <div
+              className="flex items-center justify-center w-full"
               style={{ width: WELCOME_IMAGE_SCALE, maxWidth: WELCOME_IMAGE_SCALE }}
-              onError={() => setImageAvailable(false)}
-            />
+            >
+              <img
+                src={WELCOME_IMAGE_SRC}
+                alt="Welcome photo for the wedding celebration"
+                className="block w-full h-auto"
+                onError={() => setImageAvailable(false)}
+              />
+            </div>
           ) : null}
 
           {!imageAvailable ? (
