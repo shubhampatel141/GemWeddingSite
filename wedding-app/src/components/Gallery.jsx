@@ -281,8 +281,8 @@ export default function Gallery() {
             tabIndex={0}
           >
             <div
-              className="flex transition-transform duration-[750ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform motion-reduce:duration-[0.01ms]"
-              style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+              className="flex transition-transform duration-[950ms] ease-[cubic-bezier(0.33,0.0,0.2,1)] will-change-transform motion-reduce:transition-none [backface-visibility:hidden] [transform:translateZ(0)]"
+              style={{ transform: `translate3d(-${activeIndex * 100}%, 0, 0)` }}
             >
               {GALLERY_SLIDES.map((slide) => (
                 <div key={slide.id} className="min-w-full">
