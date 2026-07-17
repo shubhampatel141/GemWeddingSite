@@ -12,8 +12,13 @@ const EVENTS = [
     summary: 'Guests are warmly welcomed to settle into the celebrations.',
     details:
       'Relax, explore, and reconnect before festivities begin. This is the gentlest part of the weekend and a chance to arrive without rushing straight into the celebrations.',
-    dressCode: 'Travel Chic',
-    location: 'Resort check-in and welcome spaces',
+    palette: [
+      { name: 'Ivory', hex: '#F5F0E6' },
+      { name: 'Sand', hex: '#D4C4A8' },
+      { name: 'Sage', hex: '#8FA88A' },
+      { name: 'Dusty Rose', hex: '#C4A4A0' },
+    ],
+    location: 'Resort check-in',
     note: 'Arriving earlier in the day will give you time to settle in before the evening events.',
   },
   {
@@ -26,7 +31,13 @@ const EVENTS = [
     summary: 'An intimate celebration of intricate henna artistry, music, and laughter.',
     details:
       'The Mehndi begins the wedding festivities with color, conversation, and an easy celebratory rhythm that brings everyone together.',
-    dressCode: 'Vibrant Indian',
+    palette: [
+      { name: 'Emerald', hex: '#0B6E4F' },
+      { name: 'Marigold', hex: '#F4A261' },
+      { name: 'Fuchsia', hex: '#C2185B' },
+      { name: 'Coral', hex: '#E76F51' },
+      { name: 'Henna Green', hex: '#5C8A4D' },
+    ],
     location: 'Celebration lawn',
     note: 'Comfortable footwear is a good idea for moving between mingling and ceremony spaces.',
   },
@@ -40,7 +51,13 @@ const EVENTS = [
     summary: 'A sacred ritual performed to invoke blessings and harmony.',
     details:
       'This ceremony sets a spiritual tone for the wedding and offers a calm, meaningful start to the day before the livelier celebrations begin.',
-    dressCode: 'Traditional (Light)',
+    palette: [
+      { name: 'Cream', hex: '#F8F1E3' },
+      { name: 'Blush', hex: '#E8C4C0' },
+      { name: 'Soft Peach', hex: '#F0C9A0' },
+      { name: 'Lavender', hex: '#C5B4D6' },
+      { name: 'Pale Gold', hex: '#E6D5A8' },
+    ],
     location: 'Ceremony pavilion',
     note: 'Lighter fabrics and softer tones will feel especially fitting for the morning atmosphere.',
   },
@@ -54,8 +71,14 @@ const EVENTS = [
     summary: 'A playful tradition full of turmeric, laughter, and blessings.',
     details:
       'Haldi is one of the most joyful events of the weekend, with a carefree energy that invites everyone into the celebration.',
-    dressCode: 'Yellow Shades',
-    location: 'Outdoor celebration area',
+    palette: [
+      { name: 'Turmeric', hex: '#E8B923' },
+      { name: 'Marigold', hex: '#F9A825' },
+      { name: 'Mustard', hex: '#E0A800' },
+      { name: 'Cream', hex: '#FFF8E7' },
+      { name: 'Saffron', hex: '#FFB300' },
+    ],
+    location: 'Outdoor area',
     note: 'Wear something you do not mind getting a little colorful if you plan to join in closely.',
   },
   {
@@ -68,7 +91,13 @@ const EVENTS = [
     summary: 'An evening of music, dance, and performances from both families.',
     details:
       'The Sangeet brings everyone together for a high-energy night of celebration, choreography, and unforgettable moments on stage.',
-    dressCode: 'Glamorous Indian',
+    palette: [
+      { name: 'Ruby', hex: '#9B1B30' },
+      { name: 'Royal Purple', hex: '#5E2B7E' },
+      { name: 'Peacock', hex: '#0A6B6B' },
+      { name: 'Gold', hex: '#D4AF37' },
+      { name: 'Magenta', hex: '#AD1457' },
+    ],
     location: 'Main event hall',
     note: 'This is the most performance-forward event, so expect a festive atmosphere and a later finish.',
   },
@@ -82,7 +111,13 @@ const EVENTS = [
     summary: 'A timeless union of tradition and love against the backdrop of Pavagadh.',
     details:
       'The ceremony brings together the heart of the celebration weekend, surrounded by family, heritage, and the beauty of the destination.',
-    dressCode: 'Formal Indian',
+    palette: [
+      { name: 'Deep Maroon', hex: '#6B1E2A' },
+      { name: 'Royal Blue', hex: '#1A3A6B' },
+      { name: 'Forest', hex: '#1B4D3E' },
+      { name: 'Antique Gold', hex: '#C9A227' },
+      { name: 'Wine', hex: '#722F37' },
+    ],
     location: 'Wedding mandap',
     note: 'Arrive a little early so you can settle in and enjoy the setting before the ceremony begins.',
   },
@@ -109,12 +144,14 @@ function TimelineButton({ event, isActive, onSelect, index }) {
         {String(index + 1).padStart(2, '0')}
       </span>
       <span
-        className={`size-12 grid place-items-center rounded-full text-[1.75rem] material-symbols-outlined ${
+        className={`size-12 inline-flex items-center justify-center rounded-full ${
           isActive ? 'bg-off-white/40 text-earth-brown' : 'bg-off-white/12 text-saffron'
         }`}
         aria-hidden="true"
       >
-        {event.icon}
+        <span className="material-symbols-outlined block text-[1.75rem] leading-none">
+          {event.icon}
+        </span>
       </span>
       <div className="space-y-2 text-left">
         <p
@@ -199,6 +236,12 @@ export default function Itinerary() {
               <p className="py-[0.7rem] px-4 rounded-full bg-warm-orange/14 text-warm-orange text-[0.72rem] font-extrabold tracking-[0.24em] uppercase">
                 {selectedEvent.time}
               </p>
+              <p className="inline-flex items-center gap-1.5 py-[0.7rem] px-4 rounded-full bg-gold-polished/12 text-earth-brown/75 text-[0.72rem] font-extrabold tracking-[0.18em] uppercase">
+                <span className="material-symbols-outlined text-base leading-none" aria-hidden="true">
+                  location_on
+                </span>
+                {selectedEvent.location}
+              </p>
             </div>
 
             <div className="space-y-5">
@@ -213,19 +256,28 @@ export default function Itinerary() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="py-[1.1rem] px-[1.2rem] rounded-[1.4rem] bg-white/55 border border-gold-polished/16">
-                <p className="text-[0.72rem] font-extrabold tracking-[0.22em] uppercase text-earth-brown/52">
-                  Dress code
-                </p>
-                <p className="mt-[0.7rem] text-earth-brown/82 leading-[1.7]">{selectedEvent.dressCode}</p>
-              </div>
-              <div className="py-[1.1rem] px-[1.2rem] rounded-[1.4rem] bg-white/55 border border-gold-polished/16">
-                <p className="text-[0.72rem] font-extrabold tracking-[0.22em] uppercase text-earth-brown/52">
-                  Location
-                </p>
-                <p className="mt-[0.7rem] text-earth-brown/82 leading-[1.7]">{selectedEvent.location}</p>
-              </div>
+            <div className="py-[1.1rem] px-[1.2rem] rounded-[1.4rem] bg-white/55 border border-gold-polished/16">
+              <p className="text-[0.72rem] font-extrabold tracking-[0.22em] uppercase text-earth-brown/52">
+                Dress code
+              </p>
+              <ul
+                className="mt-[0.7rem] flex flex-wrap justify-left gap-x-5 gap-y-3"
+                aria-label={`Suggested colors for ${selectedEvent.title}`}
+              >
+                {selectedEvent.palette.map((swatch) => (
+                  <li key={swatch.hex} className="flex w-[5rem] flex-col items-center gap-1.5">
+                    <span
+                      className="size-9 rounded-full border border-earth-brown/12 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.35)] shrink-0"
+                      style={{ backgroundColor: swatch.hex }}
+                      title={`${swatch.name} (${swatch.hex})`}
+                      aria-hidden="true"
+                    />
+                    <span className="text-[0.62rem] font-bold tracking-[0.06em] uppercase text-earth-brown/70 text-center leading-snug">
+                      {swatch.name}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <div className="space-y-5 border-t border-gold-polished/20 pt-8">
