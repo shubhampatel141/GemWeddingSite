@@ -138,8 +138,8 @@ function GallerySlide({ slide, viewportWidth }) {
   const layout = getSceneLayout(slide.layout, viewportWidth);
 
   return (
-    <div className="w-[min(calc(100%-3rem),1500px)] max-[1100px]:w-[min(calc(100%-2rem),100%)] mx-auto p-[clamp(1rem,2.4vw,1.5rem)] max-md:p-[0.85rem] rounded-[2rem] max-md:rounded-[1.4rem] border border-earth-brown/8 bg-[rgba(255,252,247,0.86)] shadow-[0_30px_80px_rgba(39,30,26,0.08)] backdrop-blur-[12px]">
-      <div className="grid grid-cols-12 max-[1100px]:grid-cols-8 max-md:grid-cols-6 grid-rows-[repeat(2,minmax(9rem,1fr))] max-[1100px]:grid-rows-[repeat(2,minmax(8rem,1fr))] max-md:grid-rows-[repeat(4,minmax(5.4rem,1fr))] gap-4 max-md:gap-[0.85rem] min-h-[clamp(19rem,28vw,24rem)] max-[1100px]:min-h-[clamp(17rem,30vw,20rem)] max-md:min-h-[clamp(21rem,78vw,26rem)]">
+    <div className="w-full p-[clamp(0.75rem,1.6vw,1.1rem)] max-md:p-[0.75rem] rounded-[1.6rem] max-md:rounded-[1.25rem] border border-earth-brown/8 bg-[rgba(255,252,247,0.86)] shadow-[0_24px_60px_rgba(39,30,26,0.08)] backdrop-blur-[12px]">
+      <div className="grid grid-cols-12 max-[1100px]:grid-cols-8 max-md:grid-cols-6 grid-rows-[repeat(2,minmax(5.5rem,1fr))] max-[1100px]:grid-rows-[repeat(2,minmax(5rem,1fr))] max-md:grid-rows-[repeat(4,minmax(4.25rem,1fr))] gap-3 max-md:gap-[0.7rem] min-h-[clamp(14rem,38vh,18rem)] max-[1100px]:min-h-[clamp(13rem,36vh,16rem)] max-md:min-h-[clamp(16rem,58vh,20rem)]">
         {GALLERY_CELLS.map((cell) => {
           const photo = slide.photos[cell.id];
           const layoutCell = layout[cell.id];
@@ -252,50 +252,49 @@ export default function Gallery() {
   };
 
   return (
-    <section ref={revealRef} className="py-32 max-md:py-28 max-md:pb-20 bg-off-white sacred-geometry-pattern" id="gallery" aria-label="Photo Gallery">
+    <section ref={revealRef} className="py-16 max-md:py-14 max-md:pb-12 bg-off-white sacred-geometry-pattern" id="gallery" aria-label="Photo Gallery">
       <div className="max-w-[1480px] mx-auto px-6 md:px-8 lg:px-10">
-        <div className="max-w-[44rem] mx-auto mb-12 max-[1100px]:mb-[2.4rem] max-md:mb-8 text-center reveal">
+        <div className="max-w-[44rem] mx-auto mb-6 max-[1100px]:mb-5 max-md:mb-4 text-center reveal">
           {/* <p className="text-[0.72rem] tracking-[0.34em] uppercase font-extrabold text-warm-orange">Photo essay</p> */}
-          <h2 className="mt-[1.4rem] max-md:mt-[0.35rem] font-headline text-[clamp(2.4rem,4.8vw,5.6rem)] max-md:text-[clamp(2.6rem,13vw,4rem)] leading-[0.98] max-md:leading-[0.9] tracking-[0.06em] uppercase text-earth-brown/92">
+          <h2 className="mt-2 max-md:mt-1 font-headline text-[clamp(2rem,4vw,3.6rem)] max-md:text-[clamp(2.2rem,11vw,3.2rem)] leading-[0.98] max-md:leading-[0.9] tracking-[0.06em] uppercase text-earth-brown/92">
             Gallery
           </h2>
         </div>
       </div>
 
-      <div className="w-screen ml-[calc(50%-50vw)] grid gap-[1.2rem] pb-4 max-md:pb-2 reveal">
-        <div className="w-[min(calc(100%-3rem),1500px)] max-[1100px]:w-[min(calc(100%-2rem),100%)] mx-auto flex items-center gap-4" aria-hidden="true">
+      <div className="relative w-[min(calc(100%-2rem),1200px)] mx-auto reveal">
+        <div className="mb-3 flex items-center gap-4" aria-hidden="true">
           <span className="min-w-[4.25rem] text-[0.72rem] tracking-[0.32em] uppercase font-extrabold text-earth-brown/62">
             {String(activeIndex + 1).padStart(2, '0')} / {String(GALLERY_SLIDES.length).padStart(2, '0')}
           </span>
           <span className="relative flex-1 h-px bg-earth-brown/12" />
         </div>
 
-        <div
-          className="relative overflow-hidden outline-none focus-visible:shadow-[0_0_0_4px_rgba(0,121,107,0.12)]"
-          aria-roledescription="carousel"
-          aria-label="Photo gallery carousel"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          onKeyDown={handleKeyDown}
-          tabIndex={0}
-        >
+        <div className="relative">
           <div
-            className="flex transition-transform duration-[750ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform motion-reduce:duration-[0.01ms]"
-            style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+            className="overflow-hidden outline-none focus-visible:shadow-[0_0_0_4px_rgba(0,121,107,0.12)] rounded-[1.6rem] max-md:rounded-[1.25rem]"
+            aria-roledescription="carousel"
+            aria-label="Photo gallery carousel"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onKeyDown={handleKeyDown}
+            tabIndex={0}
           >
-            {GALLERY_SLIDES.map((slide) => (
-              <div key={slide.id} className="min-w-full">
-                <GallerySlide slide={slide} viewportWidth={viewportWidth} />
-              </div>
-            ))}
+            <div
+              className="flex transition-transform duration-[750ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform motion-reduce:duration-[0.01ms]"
+              style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+            >
+              {GALLERY_SLIDES.map((slide) => (
+                <div key={slide.id} className="min-w-full">
+                  <GallerySlide slide={slide} viewportWidth={viewportWidth} />
+                </div>
+              ))}
+            </div>
           </div>
 
-        </div>
-
-        <div className="w-[min(calc(100%-3rem),1500px)] max-[1100px]:w-[min(calc(100%-2rem),100%)] mx-auto flex justify-end gap-[0.8rem] max-md:gap-[0.7rem]">
           <button
             type="button"
-            className="w-14 h-14 max-md:w-12 max-md:h-12 border-0 rounded-full grid place-items-center text-earth-brown bg-[rgba(255,248,240,0.92)] shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-[transform,box-shadow] duration-250 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_16px_30px_rgba(0,0,0,0.16)]"
+            className="absolute left-2 md:left-3 top-1/2 z-20 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 border-0 rounded-full grid place-items-center text-earth-brown bg-[rgba(255,248,240,0.94)] shadow-[0_10px_24px_rgba(0,0,0,0.14)] transition-[transform,box-shadow] duration-250 ease-in-out hover:scale-105 hover:shadow-[0_16px_30px_rgba(0,0,0,0.18)]"
             onClick={goToPrev}
             aria-label="Previous gallery slide"
           >
@@ -303,22 +302,24 @@ export default function Gallery() {
           </button>
           <button
             type="button"
-            className="w-14 h-14 max-md:w-12 max-md:h-12 border-0 rounded-full grid place-items-center text-earth-brown bg-[rgba(255,248,240,0.92)] shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-[transform,box-shadow] duration-250 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_16px_30px_rgba(0,0,0,0.16)]"
+            className="absolute right-2 md:right-3 top-1/2 z-20 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 border-0 rounded-full grid place-items-center text-earth-brown bg-[rgba(255,248,240,0.94)] shadow-[0_10px_24px_rgba(0,0,0,0.14)] transition-[transform,box-shadow] duration-250 ease-in-out hover:scale-105 hover:shadow-[0_16px_30px_rgba(0,0,0,0.18)]"
             onClick={goToNext}
             aria-label="Next gallery slide"
           >
             <span className="material-symbols-outlined">east</span>
           </button>
-        </div>
 
-        <div className="w-[min(calc(100%-3rem),1500px)] max-[1100px]:w-[min(calc(100%-2rem),100%)] mx-auto flex items-center justify-between gap-[1.2rem] max-md:flex-col max-md:items-start">
-          <div className="flex flex-wrap gap-[0.55rem]" role="tablist" aria-label="Gallery slides">
+          <div
+            className="absolute bottom-3 left-1/2 z-20 -translate-x-1/2 flex flex-wrap justify-center gap-[0.55rem] px-3 py-2 rounded-full bg-[rgba(255,248,240,0.88)] shadow-[0_8px_20px_rgba(0,0,0,0.1)] backdrop-blur-sm"
+            role="tablist"
+            aria-label="Gallery slides"
+          >
             {GALLERY_SLIDES.map((slide, index) => (
               <button
                 key={slide.id}
                 type="button"
-                className={`h-[0.8rem] border-0 rounded-full transition-[width,background-color] duration-250 ease-in-out ${
-                  index === activeIndex ? 'w-[2.35rem] bg-dark-teal' : 'w-[0.8rem] bg-earth-light-brown/18'
+                className={`h-[0.7rem] border-0 rounded-full transition-[width,background-color] duration-250 ease-in-out ${
+                  index === activeIndex ? 'w-[2.1rem] bg-dark-teal' : 'w-[0.7rem] bg-earth-light-brown/25'
                 }`}
                 onClick={() => goToSlide(index)}
                 role="tab"
