@@ -2,87 +2,23 @@ import { useState } from 'react';
 import useReveal from '../hooks/useReveal';
 import { FAQ_GROUPS } from '../content/siteContent';
 
-const COLORS = {
-  saffron: '#FFCA28',
-  offWhite: '#FFF8F0',
-  softIvory: '#F2E7DB',
-  mutedIvory: '#E2D3C6',
-  warmOrange: '#FF7043',
-  earthBrown: '#4E342E',
-  earthLightBrown: '#6D4C41',
-  gold: '#D4AF37',
-};
-
-const sectionIntroStyle = {
-  maxWidth: '52rem',
-  margin: '0 auto',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: '1rem',
-  textAlign: 'center',
-};
-
-const groupShellStyle = {
-  borderBottom: '1px solid rgba(255, 248, 240, 0.14)',
-  overflow: 'hidden',
-};
-
-const groupHeaderStyle = {
-  width: '100%',
-  display: 'flex',
-  alignItems: 'flex-start',
-  justifyContent: 'space-between',
-  gap: '1.5rem',
-  padding: '0 0 1.35rem',
-  textAlign: 'left',
-  border: 0,
-  background: 'transparent',
-  cursor: 'pointer',
-};
-
-const groupContentStyle = {
-  padding: '0 0 0.6rem',
-};
-
-const answerRowStyle = {
-  padding: '1.15rem 0 1.2rem',
-  borderTop: '1px solid rgba(255, 248, 240, 0.1)',
-};
-
-const highlightRowStyle = {
-  ...answerRowStyle,
-  paddingLeft: '1rem',
-  borderLeft: '2px solid rgba(255, 202, 40, 0.7)',
-};
-
-
-
 function FaqItemCard({ item }) {
-
   return (
-    <article style={item.highlight ? highlightRowStyle : answerRowStyle}>
-      <h3
-        style={{
-          marginTop: '0.75rem',
-          fontSize: '0.92rem',
-          fontWeight: 800,
-          letterSpacing: '0.22em',
-          textTransform: 'uppercase',
-          color: COLORS.offWhite,
-        }}
-      >
+    <article
+      className={
+        item.highlight
+          ? 'py-[1.15rem] pb-[1.2rem] border-t border-off-white/10 pl-4 border-l-2 border-saffron/70'
+          : 'py-[1.15rem] pb-[1.2rem] border-t border-off-white/10'
+      }
+    >
+      <h3 className="mt-3 text-[0.92rem] font-extrabold tracking-[0.22em] uppercase text-off-white">
         {item.question}
       </h3>
 
       <p
-        style={{
-          marginTop: '0.7rem',
-          color: item.highlight ? COLORS.softIvory : 'rgba(242, 231, 219, 0.82)',
-          lineHeight: 1.9,
-          fontSize: '1rem',
-          maxWidth: '44rem',
-        }}
+        className={`mt-[0.7rem] leading-[1.9] text-base max-w-[44rem] ${
+          item.highlight ? 'text-[#F2E7DB]' : 'text-[#F2E7DB]/82'
+        }`}
       >
         {item.answer}
       </p>
@@ -92,59 +28,35 @@ function FaqItemCard({ item }) {
 
 function FaqGroup({ group, isOpen, onToggle }) {
   return (
-    <article className="reveal" style={groupShellStyle}>
+    <article className="reveal border-b border-off-white/14 overflow-hidden">
       <button
         type="button"
-        style={groupHeaderStyle}
+        className="w-full flex items-start justify-between gap-6 pb-[1.35rem] text-left border-0 bg-transparent cursor-pointer"
         onClick={onToggle}
         aria-expanded={isOpen}
       >
         <div className="space-y-3 text-left">
-          <p
-            className="font-headline uppercase"
-            style={{
-              fontSize: 'clamp(1.55rem, 4vw, 2.1rem)',
-              fontWeight: 800,
-              letterSpacing: '0.08em',
-              color: COLORS.saffron,
-              lineHeight: 1,
-            }}
-          >
+          <p className="font-headline uppercase text-[clamp(1.55rem,4vw,2.1rem)] font-extrabold tracking-[0.08em] text-saffron leading-none">
             {group.title}
           </p>
-          <p
-            style={{
-              color: 'rgba(242, 231, 219, 0.72)',
-              lineHeight: 1.8,
-              fontSize: '1rem',
-              maxWidth: '48rem',
-            }}
-          >
+          <p className="text-[#F2E7DB]/72 leading-[1.8] text-base max-w-[48rem]">
             {group.description}
           </p>
         </div>
 
         <span
-          className="material-symbols-outlined shrink-0"
+          className={`material-symbols-outlined shrink-0 w-8 h-8 inline-grid place-items-center text-[1.6rem] text-saffron transition-transform duration-[250ms] ease-in-out ${
+            isOpen ? 'rotate-45' : 'rotate-0'
+          }`}
           aria-hidden="true"
-          style={{
-            width: '2rem',
-            height: '2rem',
-            display: 'inline-grid',
-            placeItems: 'center',
-            fontSize: '1.6rem',
-            color: COLORS.saffron,
-            transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',
-            transition: 'transform 0.25s ease',
-          }}
         >
           add
         </span>
       </button>
 
       {isOpen ? (
-        <div style={groupContentStyle}>
-          <div style={{ paddingTop: '0.2rem' }}>
+        <div className="pb-[0.6rem]">
+          <div className="pt-[0.2rem]">
             {group.items.map((item) => (
               <FaqItemCard key={item.question} item={item} />
             ))}
@@ -167,51 +79,21 @@ export default function ImportantInformationFaq() {
       aria-label="Important Information and FAQ"
     >
       <div className="max-w-5xl mx-auto space-y-12">
-        <div className="reveal" style={sectionIntroStyle}>
-          <p
-            style={{
-              fontSize: '0.72rem',
-              letterSpacing: '0.42em',
-              textTransform: 'uppercase',
-              fontWeight: 800,
-              color: COLORS.saffron,
-            }}
-          >
+        <div className="reveal max-w-[52rem] mx-auto flex flex-col items-center gap-4 text-center">
+          <p className="text-[0.72rem] tracking-[0.42em] uppercase font-extrabold text-saffron">
             Guest essentials
           </p>
 
-          <h2
-            className="font-cursive"
-            style={{
-              fontSize: 'clamp(3.8rem, 8vw, 6.5rem)',
-              lineHeight: 0.95,
-              color: COLORS.saffron,
-            }}
-          >
+          <h2 className="font-cursive text-[clamp(3.8rem,8vw,6.5rem)] leading-[0.95] text-saffron">
             Important FAQ
           </h2>
 
-          <p
-            style={{
-              maxWidth: '52rem',
-              color: 'rgba(242, 231, 219, 0.76)',
-              lineHeight: 1.9,
-              fontSize: '1.05rem',
-              marginBottom: '1.5rem',
-            }}
-          >
+          <p className="max-w-[52rem] text-[#F2E7DB]/76 leading-[1.9] text-[1.05rem] mb-6">
             Use this section as the practical travel checklist before you leave, and treat the
             highlighted safety notes as the fastest things to save to your phone.
           </p>
 
-          <span
-            aria-hidden="true"
-            style={{
-              width: '5.5rem',
-              height: '1px',
-              background: 'rgba(255, 202, 40, 0.5)',
-            }}
-          />
+          <span className="w-[5.5rem] h-px bg-saffron/50" aria-hidden="true" />
         </div>
 
         <div className="grid grid-cols-1 gap-10 md:gap-12">

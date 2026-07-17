@@ -9,19 +9,19 @@ const PRIMARY_TRAVEL_FACTS = TRAVEL_FACTS.filter((fact) =>
 
 function TravelFact({ fact }) {
   return (
-    <div className="travel-fact-card">
-      <p className="travel-fact-label">{fact.label}</p>
+    <div className="h-full pb-4 border-b border-off-white/16">
+      <p className="text-[0.72rem] tracking-[0.28em] uppercase font-extrabold text-black/68">{fact.label}</p>
       {fact.href ? (
         <a
           href={fact.href}
           target="_blank"
           rel="noopener noreferrer"
-          className="travel-fact-link"
+          className="mt-[0.8rem] text-black/86 leading-[1.75] hover:text-saffron"
         >
           {fact.value}
         </a>
       ) : (
-        <p className="travel-fact-value">{fact.value}</p>
+        <p className="mt-[0.8rem] text-black/86 leading-[1.75]">{fact.value}</p>
       )}
     </div>
   );
@@ -42,8 +42,8 @@ export default function Travels() {
         </div>
 
         <div className="space-y-10">
-          <div className="travel-intro-card reveal">
-            <p className="travel-card-eyebrow">Destination</p>
+          <div className="reveal">
+            <p className="mb-[0.85rem] text-[0.72rem] tracking-[0.34em] uppercase font-extrabold text-saffron">Destination</p>
             <h3 className="font-headline text-3xl md:text-4xl uppercase tracking-[0.14em] text-saffron/75 font-black">
               Vikrama Heritage, Pavagadh
             </h3>
@@ -52,20 +52,20 @@ export default function Travels() {
             </p>
           </div>
 
-          <div className="travel-facts-minimal reveal">
+          <div className="grid grid-cols-4 max-md:grid-cols-1 gap-8 max-md:gap-5 items-start reveal">
             {PRIMARY_TRAVEL_FACTS.map((fact) => (
               <TravelFact key={fact.label} fact={fact} />
             ))}
           </div>
 
-          <div className="travel-carousel-stage reveal">
+          <div className="max-w-[82rem] mx-auto reveal">
             <Carousel slides={TRAVEL_SLIDES} ariaLabel="Travels destination carousel" theme="dark" />
           </div>
         </div>
 
         <div className="space-y-14">
           <div className="reveal">
-            <div className="luggage-heading">
+            <div className="[&>div]:gap-[1.8rem]">
               <SectionHeading
                 eyebrow="Packing list"
                 title="Luggage Packing"
@@ -76,11 +76,11 @@ export default function Travels() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {PACKING_GROUPS.map((group) => (
-              <article key={group.title} className="packing-card reveal">
-                <h3 className="packing-card-title">{group.title}</h3>
+              <article key={group.title} className="h-full p-6 rounded-[1.7rem] bg-off-white/8 border border-off-white/16 backdrop-blur-[10px] reveal">
+                <h3 className="mb-4 font-headline text-[1.2rem] font-extrabold tracking-[0.1em] uppercase text-black/90">{group.title}</h3>
                 <ul className="space-y-3">
                   {group.items.map((item) => (
-                    <li key={item} className="packing-card-item">
+                    <li key={item} className="flex items-start gap-[0.7rem] text-black/86 leading-[1.7]">
                       <span className="material-symbols-outlined text-saffron text-lg" aria-hidden="true">
                         done
                       </span>

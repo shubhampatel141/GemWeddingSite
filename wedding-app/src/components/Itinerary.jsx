@@ -92,19 +92,52 @@ function TimelineButton({ event, isActive, onSelect, index }) {
   return (
     <button
       type="button"
-      className={`timeline-stop ${isActive ? 'timeline-stop-active' : ''}`}
+      className={`w-full grid grid-cols-[auto_auto_1fr] max-md:grid-cols-[auto_1fr] gap-4 max-md:gap-[0.85rem] items-start py-[1.15rem] px-[1.2rem] rounded-[1.75rem] border border-gold-polished/18 bg-off-white/8 backdrop-blur-[10px] text-left relative transition-[transform,border-color,background-color,box-shadow] duration-300 ease-in-out hover:translate-x-1 hover:border-saffron/45 hover:shadow-[0_16px_30px_rgba(0,0,0,0.14)] ${
+        isActive
+          ? 'bg-[linear-gradient(135deg,rgba(255,202,40,0.95),rgba(255,112,67,0.92))] border-transparent shadow-[0_20px_36px_rgba(255,112,67,0.2)]'
+          : ''
+      }`}
       onClick={() => onSelect(event.id)}
       aria-pressed={isActive}
       aria-label={`View details for ${event.title}`}
     >
-      <span className="timeline-index">{String(index + 1).padStart(2, '0')}</span>
-      <span className={`timeline-icon material-symbols-outlined ${isActive ? 'text-earth-brown' : 'text-saffron'}`} aria-hidden="true">
+      <span
+        className={`mt-[0.35rem] text-xs tracking-[0.26em] uppercase font-extrabold max-md:hidden ${
+          isActive ? 'text-earth-brown/72' : 'text-off-white/45'
+        }`}
+      >
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      <span
+        className={`size-12 grid place-items-center rounded-full text-[1.75rem] material-symbols-outlined ${
+          isActive ? 'bg-off-white/40 text-earth-brown' : 'bg-off-white/12 text-saffron'
+        }`}
+        aria-hidden="true"
+      >
         {event.icon}
       </span>
       <div className="space-y-2 text-left">
-        <p className="timeline-day">{event.day}</p>
-        <h3 className="timeline-title">{ event.title}</h3>
-        <p className="timeline-time">{event.time}</p>
+        <p
+          className={`text-[0.74rem] font-bold tracking-[0.2em] uppercase ${
+            isActive ? 'text-earth-brown/72' : 'text-off-white/62'
+          }`}
+        >
+          {event.day}
+        </p>
+        <h3
+          className={`text-[1.2rem] font-extrabold tracking-[0.08em] uppercase ${
+            isActive ? 'text-earth-brown' : 'text-off-white'
+          }`}
+        >
+          {event.title}
+        </h3>
+        <p
+          className={`text-[0.74rem] font-bold tracking-[0.2em] uppercase ${
+            isActive ? 'text-earth-brown/72' : 'text-off-white/62'
+          }`}
+        >
+          {event.time}
+        </p>
       </div>
     </button>
   );
@@ -137,8 +170,11 @@ export default function Itinerary() {
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-[0.88fr_1.12fr] gap-8 xl:gap-10 items-stretch">
-          <div className="timeline-panel reveal">
-            <div className="timeline-rail" aria-hidden="true" />
+          <div className="relative py-4 reveal">
+            <div
+              className="absolute top-8 bottom-8 left-6 w-0.5 bg-[linear-gradient(180deg,rgba(255,202,40,0.32),rgba(255,112,67,0.5))]"
+              aria-hidden="true"
+            />
             <div className="space-y-4 relative z-10">
               {EVENTS.map((event, index) => (
                 <TimelineButton
@@ -152,14 +188,23 @@ export default function Itinerary() {
             </div>
           </div>
 
-          <article className="itinerary-detail-card reveal h-full" aria-live="polite">
+          <article
+            className="p-8 max-md:p-6 rounded-[2rem] max-md:rounded-[1.5rem] bg-off-white border border-gold-polished/18 shadow-[0_24px_60px_rgba(0,0,0,0.18)] flex flex-col gap-7 reveal h-full"
+            aria-live="polite"
+          >
             <div className="flex flex-wrap items-center gap-3">
-              <p className="detail-chip">{selectedEvent.day}</p>
-              <p className="detail-chip detail-chip-accent">{selectedEvent.time}</p>
+              <p className="py-[0.7rem] px-4 rounded-full bg-earth-light-brown/8 text-dark-teal text-[0.72rem] font-extrabold tracking-[0.24em] uppercase">
+                {selectedEvent.day}
+              </p>
+              <p className="py-[0.7rem] px-4 rounded-full bg-warm-orange/14 text-warm-orange text-[0.72rem] font-extrabold tracking-[0.24em] uppercase">
+                {selectedEvent.time}
+              </p>
             </div>
 
             <div className="space-y-5">
-              <p className="detail-kicker">{selectedEvent.theme}</p>
+              <p className="text-xs font-extrabold tracking-[0.34em] uppercase text-warm-orange">
+                {selectedEvent.theme}
+              </p>
               <h3 className="font-headline text-4xl md:text-5xl uppercase tracking-[0.08em] text-dark-teal font-black">
                 {selectedEvent.title}
               </h3>
@@ -169,13 +214,17 @@ export default function Itinerary() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="detail-info-card">
-                <p className="detail-info-label">Dress code</p>
-                <p className="detail-info-value">{selectedEvent.dressCode}</p>
+              <div className="py-[1.1rem] px-[1.2rem] rounded-[1.4rem] bg-white/55 border border-gold-polished/16">
+                <p className="text-[0.72rem] font-extrabold tracking-[0.22em] uppercase text-earth-brown/52">
+                  Dress code
+                </p>
+                <p className="mt-[0.7rem] text-earth-brown/82 leading-[1.7]">{selectedEvent.dressCode}</p>
               </div>
-              <div className="detail-info-card">
-                <p className="detail-info-label">Location</p>
-                <p className="detail-info-value">{selectedEvent.location}</p>
+              <div className="py-[1.1rem] px-[1.2rem] rounded-[1.4rem] bg-white/55 border border-gold-polished/16">
+                <p className="text-[0.72rem] font-extrabold tracking-[0.22em] uppercase text-earth-brown/52">
+                  Location
+                </p>
+                <p className="mt-[0.7rem] text-earth-brown/82 leading-[1.7]">{selectedEvent.location}</p>
               </div>
             </div>
 
@@ -183,9 +232,11 @@ export default function Itinerary() {
               <p className="text-base md:text-lg leading-relaxed text-earth-brown/78">
                 {selectedEvent.details}
               </p>
-              <div className="detail-note-box">
-                <p className="detail-info-label">Helpful note</p>
-                <p className="detail-info-value">{selectedEvent.note}</p>
+              <div className="py-[1.1rem] px-[1.2rem] rounded-[1.4rem] bg-white/55 border border-gold-polished/16">
+                <p className="text-[0.72rem] font-extrabold tracking-[0.22em] uppercase text-earth-brown/52">
+                  Helpful note
+                </p>
+                <p className="mt-[0.7rem] text-earth-brown/82 leading-[1.7]">{selectedEvent.note}</p>
               </div>
             </div>
           </article>
