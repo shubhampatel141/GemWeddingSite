@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import useReveal from '../hooks/useReveal';
 
-const SAMPLE_GALLERY_IMAGE = '/welcome-photo.jpeg';
-
 const GALLERY_CELLS = [
   { id: 'feature' },
   { id: 'detailTop' },
@@ -76,40 +74,30 @@ const GALLERY_SLIDES = [
     id: 'arrival',
     layout: 'classic',
     photos: {
-      feature: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '50% 28%' },
-      detailTop: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '24% 62%' },
-      detailBottom: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '80% 63%' },
-      portrait: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '78% 25%' },
+      feature: { src: '/pictures/photo_1.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 40%' },
+      detailTop: { src: '/pictures/photo_2.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 35%' },
+      detailBottom: { src: '/pictures/photo_7.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 45%' },
+      portrait: { src: '/pictures/photo_4.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 30%' },
     },
   },
   {
     id: 'ritual',
     layout: 'reverse',
     photos: {
-      feature: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '46% 38%' },
-      detailTop: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '34% 44%' },
-      detailBottom: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '74% 42%' },
-      portrait: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '68% 48%' },
+      feature: { src: '/pictures/photo_8.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 40%' },
+      detailTop: { src: '/pictures/photo_5.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 35%' },
+      detailBottom: { src: '/pictures/photo_9.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 40%' },
+      portrait: { src: '/pictures/photo_6.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 30%' },
     },
   },
   {
     id: 'portraits',
     layout: 'stackedLead',
     photos: {
-      feature: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '52% 16%' },
-      detailTop: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '18% 54%' },
-      detailBottom: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '68% 58%' },
-      portrait: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '58% 20%' },
-    },
-  },
-  {
-    id: 'sunset',
-    layout: 'offset',
-    photos: {
-      feature: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '50% 50%' },
-      detailTop: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '28% 74%' },
-      detailBottom: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '76% 76%' },
-      portrait: { src: SAMPLE_GALLERY_IMAGE, alt: 'Wedding gallery sample photo', objectPosition: '82% 52%' },
+      feature: { src: '/pictures/photo_10.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 35%' },
+      detailTop: { src: '/pictures/photo_10.jpeg', alt: 'Wedding gallery photo', objectPosition: '28% 40%' },
+      detailBottom: { src: '/pictures/photo_10.jpeg', alt: 'Wedding gallery photo', objectPosition: '72% 55%' },
+      portrait: { src: '/pictures/photo_10.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 30%' },
     },
   },
 ];
@@ -138,8 +126,8 @@ function GallerySlide({ slide, viewportWidth }) {
   const layout = getSceneLayout(slide.layout, viewportWidth);
 
   return (
-    <div className="w-full p-[clamp(0.75rem,1.6vw,1.1rem)] max-md:p-[0.75rem] rounded-[1.6rem] max-md:rounded-[1.25rem] border border-earth-brown/8 bg-[rgba(255,252,247,0.86)] shadow-[0_24px_60px_rgba(39,30,26,0.08)] backdrop-blur-[12px]">
-      <div className="grid grid-cols-12 max-[1100px]:grid-cols-8 max-md:grid-cols-6 grid-rows-[repeat(2,minmax(5.5rem,1fr))] max-[1100px]:grid-rows-[repeat(2,minmax(5rem,1fr))] max-md:grid-rows-[repeat(4,minmax(4.25rem,1fr))] gap-3 max-md:gap-[0.7rem] min-h-[clamp(14rem,38vh,18rem)] max-[1100px]:min-h-[clamp(13rem,36vh,16rem)] max-md:min-h-[clamp(16rem,58vh,20rem)]">
+    <div className="box-border w-full h-full p-[clamp(0.75rem,1.6vw,1.1rem)] max-md:p-[0.75rem] rounded-[1.6rem] max-md:rounded-[1.25rem] border border-earth-brown/8 bg-[rgba(255,252,247,0.86)] backdrop-blur-[12px]">
+      <div className="grid h-full w-full grid-cols-12 max-[1100px]:grid-cols-8 max-md:grid-cols-6 grid-rows-2 max-md:grid-rows-4 gap-3 max-md:gap-[0.7rem]">
         {GALLERY_CELLS.map((cell) => {
           const photo = slide.photos[cell.id];
           const layoutCell = layout[cell.id];
@@ -148,30 +136,26 @@ function GallerySlide({ slide, viewportWidth }) {
           return (
             <div
               key={`${slide.id}-${cell.id}`}
-              className="relative overflow-hidden min-h-0 rounded-[1.45rem] max-md:rounded-[1.1rem] bg-[linear-gradient(180deg,rgba(241,236,229,0.92),rgba(232,226,218,0.98))] transition-[border-radius] duration-350 ease-in-out"
+              className="relative overflow-hidden min-h-0 min-w-0 rounded-[1.45rem] max-md:rounded-[1.1rem] bg-[linear-gradient(180deg,rgba(241,236,229,0.92),rgba(232,226,218,0.98))] transition-[border-radius] duration-350 ease-in-out"
               style={{
                 gridColumn: layoutCell.gridColumn,
                 gridRow: layoutCell.gridRow,
               }}
             >
               {photo?.src ? (
-                <div
-                  className={`w-full h-full grid place-items-center bg-[linear-gradient(180deg,rgba(252,250,247,0.24),rgba(239,232,224,0.18))] ${fit === 'contain' ? 'p-[clamp(0.8rem,2vw,1.35rem)]' : ''}`}
-                >
-                  <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    className={`block w-full h-full ${fit === 'contain' ? 'object-contain' : 'object-cover'}`}
-                    style={{
-                      objectPosition: photo.objectPosition || 'center',
-                    }}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  className={`absolute inset-0 block w-full h-full ${fit === 'contain' ? 'object-contain p-[clamp(0.8rem,2vw,1.35rem)]' : 'object-cover'}`}
+                  style={{
+                    objectPosition: photo.objectPosition || 'center',
+                  }}
+                  loading="lazy"
+                  decoding="async"
+                />
               ) : (
                 <div
-                  className="w-full h-full grid place-items-center bg-[linear-gradient(135deg,rgba(255,255,255,0.52),rgba(240,234,226,0.88)),linear-gradient(180deg,rgba(229,221,212,0.74),rgba(248,244,239,0.96))]"
+                  className="absolute inset-0 grid place-items-center bg-[linear-gradient(135deg,rgba(255,255,255,0.52),rgba(240,234,226,0.88)),linear-gradient(180deg,rgba(229,221,212,0.74),rgba(248,244,239,0.96))]"
                   aria-hidden="true"
                 >
                   <span className="material-symbols-outlined text-[2rem] max-md:text-[1.6rem] text-earth-brown/34">photo_camera</span>
@@ -272,7 +256,7 @@ export default function Gallery() {
 
         <div className="relative">
           <div
-            className="overflow-hidden outline-none focus-visible:shadow-[0_0_0_4px_rgba(0,121,107,0.12)] rounded-[1.6rem] max-md:rounded-[1.25rem]"
+            className="overflow-hidden aspect-[2/1] max-[1100px]:aspect-[5/3] max-md:aspect-[4/5] outline-none shadow-[0_24px_60px_rgba(39,30,26,0.08)] focus-visible:shadow-[0_0_0_4px_rgba(0,121,107,0.12),0_24px_60px_rgba(39,30,26,0.08)] rounded-[1.6rem] max-md:rounded-[1.25rem]"
             aria-roledescription="carousel"
             aria-label="Photo gallery carousel"
             onTouchStart={handleTouchStart}
@@ -281,11 +265,11 @@ export default function Gallery() {
             tabIndex={0}
           >
             <div
-              className="flex transition-transform duration-[950ms] ease-[cubic-bezier(0.33,0.0,0.2,1)] will-change-transform motion-reduce:transition-none [backface-visibility:hidden] [transform:translateZ(0)]"
+              className="flex h-full items-stretch transition-transform duration-[950ms] ease-[cubic-bezier(0.33,0.0,0.2,1)] will-change-transform motion-reduce:transition-none [backface-visibility:hidden] [transform:translateZ(0)]"
               style={{ transform: `translate3d(-${activeIndex * 100}%, 0, 0)` }}
             >
               {GALLERY_SLIDES.map((slide) => (
-                <div key={slide.id} className="min-w-full">
+                <div key={slide.id} className="min-w-full w-full h-full shrink-0">
                   <GallerySlide slide={slide} viewportWidth={viewportWidth} />
                 </div>
               ))}
