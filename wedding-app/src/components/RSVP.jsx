@@ -89,20 +89,21 @@ export default function RSVP() {
   return (
     <section ref={ref} className="py-32 px-6 bg-teal-bright relative overflow-hidden" id="rsvp" aria-label="RSVP">
       <div className="absolute inset-0 sacred-geometry-pattern opacity-10" aria-hidden="true" />
-      <div className="max-w-4xl mx-auto envelope-container relative z-10 reveal">
-        <div
-          className={`envelope-wrapper shadow-2xl border-t-[8px] border-saffron rounded-b-lg ${envelopeOpen ? 'envelope-open' : ''}`}
-        >
-          <div className="envelope-flap" aria-hidden="true" />
+      <div className="max-w-4xl mx-auto perspective-[1500px] relative z-10 reveal">
+        <div className="relative w-full transition-transform duration-[1.2s] ease-[cubic-bezier(0.4,0,0.2,1)] [transform-style:preserve-3d] bg-[#fffefb] min-h-[400px] shadow-2xl border-t-[8px] border-saffron rounded-b-lg">
+          <div
+            className={`absolute top-0 left-0 w-full h-1/2 bg-off-white [clip-path:polygon(0_0,100%_0,50%_100%)] transition-transform duration-800 ease-in-out origin-top border-b border-gold-polished/30 ${envelopeOpen ? 'rotate-x-180 z-0' : 'z-40'}`}
+            aria-hidden="true"
+          />
           <button
-            className="wax-seal"
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[85px] bg-[radial-gradient(circle_at_center,#D4AF37,#B8860B)] rounded-full flex items-center justify-center text-white font-headline font-black z-45 cursor-pointer transition-all duration-500 hover:scale-110 hover:shadow-[0_0_20px_rgba(212,175,55,0.5)] ${envelopeOpen ? 'opacity-0 pointer-events-none' : ''}`}
             onClick={openEnvelope}
             aria-label="Open RSVP envelope"
           >
             S&amp;S
           </button>
 
-          <div className="form-content p-8 md:p-24 relative z-10 bg-white">
+          <div className={`p-8 md:p-24 relative z-10 bg-white transition-all duration-1000 ease delay-[0.4s] ${envelopeOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[50px]'}`}>
             <div className="text-center mb-16 space-y-6">
               <h2 className="font-cursive text-6xl md:text-8xl text-teal-bright normal-case leading-none">
                 Confirm Your Attendance

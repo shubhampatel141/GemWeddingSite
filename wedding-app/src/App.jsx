@@ -3,7 +3,8 @@ import Hero from './components/Hero'
 import Welcome from './components/Welcome'
 import Story from './components/Story'
 import Itinerary from './components/Itinerary'
-import Destination from './components/Destination'
+import Travels from './components/Travels'
+import ImportantInformationFaq from './components/ImportantInformationFaq'
 import Gallery from './components/Gallery'
 import RSVP from './components/RSVP'
 import Footer from './components/Footer'
@@ -15,11 +16,12 @@ function App() {
       <main>
         <Hero />
         <Welcome />
-        <Story />
+        {/* <Story /> */}
         <Itinerary />
-        <Destination />
+        <Travels />
+        <ImportantInformationFaq />
         <Gallery />
-        <RSVP />
+        {/* <RSVP /> */}
       </main>
       <Footer />
     </>

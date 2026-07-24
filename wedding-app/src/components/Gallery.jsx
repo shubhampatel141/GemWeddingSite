@@ -1,111 +1,319 @@
-import { useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useReveal from '../hooks/useReveal';
 
-const GALLERY_ITEMS = [
-  { label: 'Ritual', aspect: 'aspect-square', offset: '' },
-  { label: 'Heritage', aspect: 'aspect-[3/4]', offset: 'mt-16' },
-  { label: 'Connection', aspect: 'aspect-square', offset: '' },
-  { label: 'Devotion', aspect: 'aspect-[3/4]', offset: 'mt-16' },
-  { label: 'Tradition', aspect: 'aspect-square', offset: '' },
-  { label: 'Joy', aspect: 'aspect-[3/4]', offset: 'mt-16' },
-  { label: 'Grace', aspect: 'aspect-square', offset: '' },
-  { label: 'Eternity', aspect: 'aspect-[3/4]', offset: 'mt-16' },
+const GALLERY_CELLS = [
+  { id: 'feature' },
+  { id: 'detailTop' },
+  { id: 'detailBottom' },
+  { id: 'portrait' },
 ];
 
-export default function Gallery() {
-  const ref = useReveal();
-  const [lightboxIndex, setLightboxIndex] = useState(null);
+const DESKTOP_LAYOUTS = {
+  classic: {
+    feature: { variant: 'feature', gridColumn: '1 / span 6', gridRow: '1 / span 2' },
+    detailTop: { variant: 'detail', gridColumn: '7 / span 3', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '7 / span 3', gridRow: '2 / span 1' },
+    portrait: { variant: 'portrait', gridColumn: '10 / span 3', gridRow: '1 / span 2' },
+  },
+  reverse: {
+    portrait: { variant: 'portrait', gridColumn: '1 / span 3', gridRow: '1 / span 2' },
+    feature: { variant: 'feature', gridColumn: '4 / span 6', gridRow: '1 / span 2' },
+    detailTop: { variant: 'detail', gridColumn: '10 / span 3', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '10 / span 3', gridRow: '2 / span 1' },
+  },
+  stackedLead: {
+    detailTop: { variant: 'detail', gridColumn: '1 / span 3', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '1 / span 3', gridRow: '2 / span 1' },
+    feature: { variant: 'feature', gridColumn: '4 / span 6', gridRow: '1 / span 2' },
+    portrait: { variant: 'portrait', gridColumn: '10 / span 3', gridRow: '1 / span 2' },
+  },
+  offset: {
+    portrait: { variant: 'portrait', gridColumn: '1 / span 3', gridRow: '1 / span 2' },
+    detailTop: { variant: 'detail', gridColumn: '4 / span 3', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '4 / span 3', gridRow: '2 / span 1' },
+    feature: { variant: 'feature', gridColumn: '7 / span 6', gridRow: '1 / span 2' },
+  },
+};
 
-  const openLightbox = useCallback((index) => {
-    setLightboxIndex(index);
-    document.body.style.overflow = 'hidden';
-  }, []);
+const TABLET_LAYOUTS = {
+  classic: {
+    feature: { variant: 'feature', gridColumn: '1 / span 4', gridRow: '1 / span 2' },
+    detailTop: { variant: 'detail', gridColumn: '5 / span 2', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '5 / span 2', gridRow: '2 / span 1' },
+    portrait: { variant: 'portrait', gridColumn: '7 / span 2', gridRow: '1 / span 2' },
+  },
+  reverse: {
+    portrait: { variant: 'portrait', gridColumn: '1 / span 2', gridRow: '1 / span 2' },
+    feature: { variant: 'feature', gridColumn: '3 / span 4', gridRow: '1 / span 2' },
+    detailTop: { variant: 'detail', gridColumn: '7 / span 2', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '7 / span 2', gridRow: '2 / span 1' },
+  },
+  stackedLead: {
+    detailTop: { variant: 'detail', gridColumn: '1 / span 2', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '1 / span 2', gridRow: '2 / span 1' },
+    feature: { variant: 'feature', gridColumn: '3 / span 4', gridRow: '1 / span 2' },
+    portrait: { variant: 'portrait', gridColumn: '7 / span 2', gridRow: '1 / span 2' },
+  },
+  offset: {
+    portrait: { variant: 'portrait', gridColumn: '1 / span 2', gridRow: '1 / span 2' },
+    detailTop: { variant: 'detail', gridColumn: '3 / span 2', gridRow: '1 / span 1' },
+    detailBottom: { variant: 'detail', gridColumn: '3 / span 2', gridRow: '2 / span 1' },
+    feature: { variant: 'feature', gridColumn: '5 / span 4', gridRow: '1 / span 2' },
+  },
+};
 
-  const closeLightbox = useCallback(() => {
-    setLightboxIndex(null);
-    document.body.style.overflow = '';
-  }, []);
+const MOBILE_LAYOUT = {
+  feature: { variant: 'feature', gridColumn: '1 / span 6', gridRow: '1 / span 2' },
+  portrait: { variant: 'portrait', gridColumn: '1 / span 3', gridRow: '3 / span 2' },
+  detailTop: { variant: 'detail', gridColumn: '4 / span 3', gridRow: '3 / span 1' },
+  detailBottom: { variant: 'detail', gridColumn: '4 / span 3', gridRow: '4 / span 1' },
+};
 
-  const goNext = useCallback(() => {
-    setLightboxIndex((prev) => (prev + 1) % GALLERY_ITEMS.length);
-  }, []);
+const GALLERY_SLIDES = [
+  {
+    id: 'arrival',
+    layout: 'classic',
+    photos: {
+      feature: { src: '/pictures/photo_1.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 40%' },
+      detailTop: { src: '/pictures/photo_2.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 35%' },
+      detailBottom: { src: '/pictures/photo_7.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 45%' },
+      portrait: { src: '/pictures/photo_11.jpg', alt: 'Wedding gallery photo', objectPosition: '50% 30%' },
+    },
+  },
+  {
+    id: 'ritual',
+    layout: 'reverse',
+    photos: {
+      feature: { src: '/pictures/photo_8.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 40%' },
+      detailTop: { src: '/pictures/photo_5.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 35%' },
+      detailBottom: { src: '/pictures/photo_9.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 40%' },
+      portrait: { src: '/pictures/photo_6.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 30%' },
+    },
+  },
+  {
+    id: 'portraits',
+    layout: 'stackedLead',
+    photos: {
+      feature: { src: '/pictures/photo_10.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 35%' },
+      detailTop: { src: '/pictures/photo_4.jpeg', alt: 'Wedding gallery photo', objectPosition: '28% 40%' },
+      detailBottom: { src: '/pictures/photo_12.jpeg', alt: 'Wedding gallery photo', objectPosition: '72% 55%' },
+      portrait: { src: '/pictures/photo_13.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 30%' },
+    },
+  },
+];
 
-  const goPrev = useCallback(() => {
-    setLightboxIndex((prev) => (prev - 1 + GALLERY_ITEMS.length) % GALLERY_ITEMS.length);
-  }, []);
+function clampIndex(index, length) {
+  if (length === 0) {
+    return 0;
+  }
+
+  return (index + length) % length;
+}
+
+function getSceneLayout(layoutKey, viewportWidth) {
+  if (viewportWidth <= 768) {
+    return MOBILE_LAYOUT;
+  }
+
+  if (viewportWidth <= 1100) {
+    return TABLET_LAYOUTS[layoutKey] ?? TABLET_LAYOUTS.classic;
+  }
+
+  return DESKTOP_LAYOUTS[layoutKey] ?? DESKTOP_LAYOUTS.classic;
+}
+
+function GallerySlide({ slide, viewportWidth }) {
+  const layout = getSceneLayout(slide.layout, viewportWidth);
 
   return (
-    <section ref={ref} className="py-32 bg-off-white sacred-geometry-pattern" id="gallery" aria-label="Photo Gallery">
-      <div className="max-w-[1400px] mx-auto px-6">
-        <div className="text-center mb-24 reveal">
-          <h2 className="font-cursive text-7xl md:text-9xl text-teal-bright normal-case">The gallery</h2>
-          <p className="text-[13px] tracking-[0.5em] uppercase text-warm-orange mt-6 font-black">
-            Building a Shared Future
-          </p>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
-          {GALLERY_ITEMS.map((item, index) => (
-            <button
-              key={item.label}
-              className={`${item.aspect} ${item.offset} border border-gold-polished/30 flex items-center justify-center p-12 bg-white reveal shadow-sm hover:shadow-lg transition-all cursor-pointer group`}
-              onClick={() => openLightbox(index)}
-              aria-label={`View ${item.label} photo`}
+    <div className="box-border w-full h-full p-[clamp(0.75rem,1.6vw,1.1rem)] max-md:p-[0.75rem] rounded-[1.6rem] max-md:rounded-[1.25rem] border border-earth-brown/8 bg-[rgba(255,252,247,0.86)] backdrop-blur-[12px]">
+      <div className="grid h-full w-full grid-cols-12 max-[1100px]:grid-cols-8 max-md:grid-cols-6 grid-rows-2 max-md:grid-rows-4 gap-3 max-md:gap-[0.7rem]">
+        {GALLERY_CELLS.map((cell) => {
+          const photo = slide.photos[cell.id];
+          const layoutCell = layout[cell.id];
+          const fit = photo?.fit || 'cover';
+
+          return (
+            <div
+              key={`${slide.id}-${cell.id}`}
+              className="relative overflow-hidden min-h-0 min-w-0 rounded-[1.45rem] max-md:rounded-[1.1rem] bg-[linear-gradient(180deg,rgba(241,236,229,0.92),rgba(232,226,218,0.98))] transition-[border-radius] duration-350 ease-in-out"
+              style={{
+                gridColumn: layoutCell.gridColumn,
+                gridRow: layoutCell.gridRow,
+              }}
             >
-              <span className="font-headline text-xl text-gold-polished/40 uppercase font-black tracking-widest group-hover:text-gold-polished transition-colors">
-                {item.label}
-              </span>
-            </button>
-          ))}
+              {photo?.src ? (
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  className={`absolute inset-0 block w-full h-full ${fit === 'contain' ? 'object-contain p-[clamp(0.8rem,2vw,1.35rem)]' : 'object-cover'}`}
+                  style={{
+                    objectPosition: photo.objectPosition || 'center',
+                  }}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <div
+                  className="absolute inset-0 grid place-items-center bg-[linear-gradient(135deg,rgba(255,255,255,0.52),rgba(240,234,226,0.88)),linear-gradient(180deg,rgba(229,221,212,0.74),rgba(248,244,239,0.96))]"
+                  aria-hidden="true"
+                >
+                  <span className="material-symbols-outlined text-[2rem] max-md:text-[1.6rem] text-earth-brown/34">photo_camera</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default function Gallery() {
+  const revealRef = useReveal();
+  const touchStartX = useRef(null);
+  const [viewportWidth, setViewportWidth] = useState(() => (typeof window === 'undefined' ? 1440 : window.innerWidth));
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const syncViewport = () => {
+      setViewportWidth(window.innerWidth);
+    };
+
+    syncViewport();
+    window.addEventListener('resize', syncViewport);
+
+    return () => {
+      window.removeEventListener('resize', syncViewport);
+    };
+  }, []);
+
+  const goToSlide = (index) => {
+    setActiveIndex(clampIndex(index, GALLERY_SLIDES.length));
+  };
+
+  const goToNext = () => {
+    setActiveIndex((previous) => clampIndex(previous + 1, GALLERY_SLIDES.length));
+  };
+
+  const goToPrev = () => {
+    setActiveIndex((previous) => clampIndex(previous - 1, GALLERY_SLIDES.length));
+  };
+
+  const handleTouchStart = (event) => {
+    touchStartX.current = event.touches[0]?.clientX ?? null;
+  };
+
+  const handleTouchEnd = (event) => {
+    if (touchStartX.current === null) {
+      return;
+    }
+
+    const touchEndX = event.changedTouches[0]?.clientX ?? touchStartX.current;
+    const delta = touchStartX.current - touchEndX;
+
+    if (Math.abs(delta) > 40) {
+      if (delta > 0) {
+        goToNext();
+      } else {
+        goToPrev();
+      }
+    }
+
+    touchStartX.current = null;
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      goToNext();
+    }
+
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      goToPrev();
+    }
+  };
+
+  return (
+    <section ref={revealRef} className="py-16 max-md:py-14 max-md:pb-12 bg-off-white sacred-geometry-pattern" id="gallery" aria-label="Photo Gallery">
+      <div className="max-w-[1480px] mx-auto px-6 md:px-8 lg:px-10">
+        <div className="max-w-[44rem] mx-auto mb-6 max-[1100px]:mb-5 max-md:mb-4 text-center reveal">
+          {/* <p className="text-[0.72rem] tracking-[0.34em] uppercase font-extrabold text-warm-orange">Photo essay</p> */}
+          <h2 className="mt-2 max-md:mt-1 font-headline text-[clamp(2rem,4vw,3.6rem)] max-md:text-[clamp(2.2rem,11vw,3.2rem)] leading-[0.98] max-md:leading-[0.9] tracking-[0.06em] uppercase text-earth-brown/92">
+            Gallery
+          </h2>
         </div>
       </div>
 
-      {/* Lightbox Modal */}
-      {lightboxIndex !== null && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center lightbox-overlay"
-          onClick={closeLightbox}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Gallery lightbox"
-        >
-          <button
-            className="absolute top-6 right-6 text-white/80 hover:text-white transition-colors"
-            onClick={closeLightbox}
-            aria-label="Close lightbox"
-          >
-            <span className="material-symbols-outlined text-4xl">close</span>
-          </button>
+      <div className="relative w-[min(calc(100%-2rem),1200px)] mx-auto reveal">
+        <div className="mb-3 flex items-center gap-4" aria-hidden="true">
+          <span className="min-w-[4.25rem] text-[0.72rem] tracking-[0.32em] uppercase font-extrabold text-earth-brown/62">
+            {String(activeIndex + 1).padStart(2, '0')} / {String(GALLERY_SLIDES.length).padStart(2, '0')}
+          </span>
+          <span className="relative flex-1 h-px bg-earth-brown/12" />
+        </div>
 
-          <button
-            className="absolute left-6 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors"
-            onClick={(e) => { e.stopPropagation(); goPrev(); }}
-            aria-label="Previous image"
-          >
-            <span className="material-symbols-outlined text-5xl">chevron_left</span>
-          </button>
-
+        <div className="relative">
           <div
-            className="max-w-3xl max-h-[80vh] bg-white/10 backdrop-blur-md border border-gold-polished/30 flex items-center justify-center p-16 md:p-24"
-            onClick={(e) => e.stopPropagation()}
+            className="overflow-hidden aspect-[2/1] max-[1100px]:aspect-[5/3] max-md:aspect-[4/5] outline-none shadow-[0_24px_60px_rgba(39,30,26,0.08)] focus-visible:shadow-[0_0_0_4px_rgba(0,121,107,0.12),0_24px_60px_rgba(39,30,26,0.08)] rounded-[1.6rem] max-md:rounded-[1.25rem]"
+            aria-roledescription="carousel"
+            aria-label="Photo gallery carousel"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onKeyDown={handleKeyDown}
+            tabIndex={0}
           >
-            <div className="text-center space-y-6">
-              <span className="material-symbols-outlined text-saffron text-8xl" aria-hidden="true">photo_camera</span>
-              <p className="font-headline text-3xl text-white uppercase font-black tracking-widest">
-                {GALLERY_ITEMS[lightboxIndex].label}
-              </p>
-              <p className="text-white/50 text-sm tracking-widest uppercase">Photo placeholder</p>
+            <div
+              className="flex h-full items-stretch transition-transform duration-[950ms] ease-[cubic-bezier(0.33,0.0,0.2,1)] will-change-transform motion-reduce:transition-none [backface-visibility:hidden] [transform:translateZ(0)]"
+              style={{ transform: `translate3d(-${activeIndex * 100}%, 0, 0)` }}
+            >
+              {GALLERY_SLIDES.map((slide) => (
+                <div key={slide.id} className="min-w-full w-full h-full shrink-0">
+                  <GallerySlide slide={slide} viewportWidth={viewportWidth} />
+                </div>
+              ))}
             </div>
           </div>
 
           <button
-            className="absolute right-6 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors"
-            onClick={(e) => { e.stopPropagation(); goNext(); }}
-            aria-label="Next image"
+            type="button"
+            className="absolute left-2 md:left-3 top-1/2 z-20 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 border-0 rounded-full grid place-items-center text-earth-brown bg-[rgba(255,248,240,0.94)] shadow-[0_10px_24px_rgba(0,0,0,0.14)] transition-[transform,box-shadow] duration-250 ease-in-out hover:scale-105 hover:shadow-[0_16px_30px_rgba(0,0,0,0.18)]"
+            onClick={goToPrev}
+            aria-label="Previous gallery slide"
           >
-            <span className="material-symbols-outlined text-5xl">chevron_right</span>
+            <span className="material-symbols-outlined">west</span>
           </button>
+          <button
+            type="button"
+            className="absolute right-2 md:right-3 top-1/2 z-20 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 border-0 rounded-full grid place-items-center text-earth-brown bg-[rgba(255,248,240,0.94)] shadow-[0_10px_24px_rgba(0,0,0,0.14)] transition-[transform,box-shadow] duration-250 ease-in-out hover:scale-105 hover:shadow-[0_16px_30px_rgba(0,0,0,0.18)]"
+            onClick={goToNext}
+            aria-label="Next gallery slide"
+          >
+            <span className="material-symbols-outlined">east</span>
+          </button>
+
+          <div
+            className="absolute bottom-3 left-1/2 z-20 -translate-x-1/2 flex flex-wrap justify-center gap-[0.55rem] px-3 py-2 rounded-full bg-[rgba(255,248,240,0.88)] shadow-[0_8px_20px_rgba(0,0,0,0.1)] backdrop-blur-sm"
+            role="tablist"
+            aria-label="Gallery slides"
+          >
+            {GALLERY_SLIDES.map((slide, index) => (
+              <button
+                key={slide.id}
+                type="button"
+                className={`h-[0.7rem] border-0 rounded-full transition-[width,background-color] duration-250 ease-in-out ${
+                  index === activeIndex ? 'w-[2.1rem] bg-dark-teal' : 'w-[0.7rem] bg-earth-light-brown/25'
+                }`}
+                onClick={() => goToSlide(index)}
+                role="tab"
+                aria-selected={index === activeIndex}
+                aria-label={`Go to gallery slide ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
-      )}
+      </div>
     </section>
   );
 }
