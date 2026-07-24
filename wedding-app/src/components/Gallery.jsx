@@ -77,7 +77,7 @@ const GALLERY_SLIDES = [
       feature: { src: '/pictures/photo_1.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 40%' },
       detailTop: { src: '/pictures/photo_2.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 35%' },
       detailBottom: { src: '/pictures/photo_7.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 45%' },
-      portrait: { src: '/pictures/photo_4.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 30%' },
+      portrait: { src: '/pictures/photo_11.jpg', alt: 'Wedding gallery photo', objectPosition: '50% 30%' },
     },
   },
   {
@@ -95,9 +95,9 @@ const GALLERY_SLIDES = [
     layout: 'stackedLead',
     photos: {
       feature: { src: '/pictures/photo_10.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 35%' },
-      detailTop: { src: '/pictures/photo_10.jpeg', alt: 'Wedding gallery photo', objectPosition: '28% 40%' },
-      detailBottom: { src: '/pictures/photo_10.jpeg', alt: 'Wedding gallery photo', objectPosition: '72% 55%' },
-      portrait: { src: '/pictures/photo_10.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 30%' },
+      detailTop: { src: '/pictures/photo_4.jpeg', alt: 'Wedding gallery photo', objectPosition: '28% 40%' },
+      detailBottom: { src: '/pictures/photo_12.jpeg', alt: 'Wedding gallery photo', objectPosition: '72% 55%' },
+      portrait: { src: '/pictures/photo_13.jpeg', alt: 'Wedding gallery photo', objectPosition: '50% 30%' },
     },
   },
 ];
